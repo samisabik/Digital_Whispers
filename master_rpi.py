@@ -7,6 +7,7 @@ import wave
 import time
 from socket import socket, AF_INET, SOCK_DGRAM
 
+## test
 SERVER_IP   = '192.168.2.174'
 PORT_NUMBER = 5000
 SIZE = 1024
