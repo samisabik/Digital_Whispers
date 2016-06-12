@@ -1,15 +1,4 @@
-import json
-from os.path import join, dirname
-from watson_developer_cloud import SpeechToTextV1
-from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM
-import sys
-import utility
-import time
-from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM
-import sys
 
-PORT_NUMBER = 5000
-SIZE = 1024
 
 hostName = gethostbyname( '0.0.0.0' )
 
