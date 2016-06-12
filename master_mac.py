@@ -1,23 +1,36 @@
 import json
 from os.path import join, dirname
 import os, sys
-from watson_developer_cloud import TextToSpeechV1
-import pyaudio
-import wave
-from socket import socket, AF_INET, SOCK_DGRAM
+from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
+import pyaudio,wave
+from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM
+import utility,time
 
+## Socket setup
 SERVER_IP   = '127.0.0.1'
 PORT_NUMBER = 5000
 SIZE = 1024
-
+hostName = gethostbyname( '0.0.0.0' )
 mySocket = socket( AF_INET, SOCK_DGRAM )
+mySocket.bind( (hostName, PORT_NUMBER) )
 
-chunk = 1024
+## Audio setup
+WAV_CHUNK = 1024
 
-text_to_speech = TextToSpeechV1(
+## Watson Congitive API
+text_to_speech = TextToSpeechV1
+(
     username='YOUR_WATSON_USERNAME',
-    password='YOUR_WATSON_PASSWORD')
+    password='YOUR_WATSON_PASSWORD'
+)
 
+speech_to_text = SpeechToTextV1
+(
+    username='YOUR_WATSON_USERNAME',
+    password='YOUR_WATSON_PASSWORD'
+)
+
+## MAIN
 print "Enter some text:",
 text = raw_input()
 
@@ -35,11 +48,11 @@ stream = p.open(
     channels = wf.getnchannels(),
     rate = wf.getframerate(),
     output = True)
-data = wf.readframes(chunk)
+data = wf.readframes(WAV_CHUNK)
 
 while data != '':
     stream.write(data)
-    data = wf.readframes(chunk)
+    data = wf.readframes(WAV_CHUNK)
 
 stream.close()
 p.terminate()
