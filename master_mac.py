@@ -4,10 +4,9 @@ import os, sys
 from watson_developer_cloud import TextToSpeechV1
 import pyaudio
 import wave
-import time
 from socket import socket, AF_INET, SOCK_DGRAM
 
-SERVER_IP   = '192.168.2.174'
+SERVER_IP   = '127.0.0.1'
 PORT_NUMBER = 5000
 SIZE = 1024
 
@@ -26,8 +25,7 @@ with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file:
     audio_file.write(text_to_speech.synthesize(text))
 
 mySocket.sendto('start',(SERVER_IP,PORT_NUMBER))
-time.sleep(0.5)
-print("starting sound")
+print("START TTS")
 
 wf = wave.open('output/synthesize.wav', 'rb')
 p = pyaudio.PyAudio()
@@ -46,6 +44,6 @@ while data != '':
 stream.close()
 p.terminate()
 
-print("stop sound")
+print("END TTS")
 mySocket.sendto('stop',(SERVER_IP,PORT_NUMBER))
 time.sleep(0.5)
