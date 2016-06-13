@@ -1,5 +1,4 @@
-import pyaudio
-import wave
+import pyaudio,wave
 
 class Recorder(object):
     '''A recorder class for recording audio to a WAV file.
