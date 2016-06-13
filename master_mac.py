@@ -2,7 +2,6 @@ import json
 from os.path import join, dirname
 import os, sys
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
-import pyaudio,wave
 from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM
 import utility,time
 
@@ -15,67 +14,49 @@ mySocket = socket( AF_INET, SOCK_DGRAM )
 mySocket.bind( (hostName, PORT_NUMBER) )
 
 ## Audio setup
-WAV_CHUNK = 1024
+WAV_CHUNK = 256
 
 ## Watson Congitive API
-text_to_speech = TextToSpeechV1
-(
+text_to_speech = TextToSpeechV1(
     username='96db6c7a-2595-491a-9a62-740dc31e0482',
     password='azDpe42DlQ5C'
 )
 
-speech_to_text = SpeechToTextV1
-(
+speech_to_text = SpeechToTextV1(
     username='a1c7a39e-6618-4274-98f1-6ec5ef7237b8',
     password='pU5vkvlPIpmZ'
 )
 
-## MAIN
-print "Enter some text:",
-text = raw_input()
+if __name__ == "__main__":
+    print "Enter some text:",
+    text = raw_input()
 
-with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file:
-    audio_file.write(text_to_speech.synthesize(text))
+## TEXT TO SPEECH API CALL
+    with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file:
+        audio_file.write(text_to_speech.synthesize(text))
 
-mySocket.sendto('start',(SERVER_IP,PORT_NUMBER))
-print("START TTS")
+## SPEECH TO TEXT API CALL
+    with open(join(dirname(__file__), 'output/record.wav'), 'rb') as audio_file:
+        result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
+        parsed_json = json.loads(result)
+    	print parsed_json['results'][0]['alternatives'][0]['transcript']
+    	sys.exit()  
 
-wf = wave.open('output/synthesize.wav', 'rb')
-p = pyaudio.PyAudio()
+# PLAY SYNTHESIZE
+    mySocket.sendto('start',(SERVER_IP,PORT_NUMBER))
+    os.system('omxplayer -o local output/synthesize.wav')
+    mySocket.sendto('end',(SERVER_IP,PORT_NUMBER))
 
-stream = p.open(
-    format = p.get_format_from_width(wf.getsampwidth()),
-    channels = wf.getnchannels(),
-    rate = wf.getframerate(),
-    output = True)
-data = wf.readframes(WAV_CHUNK)
+# RECORD MICROPHONE
+    rec = utility.Recorder(channels=2)
 
-while data != '':
-    stream.write(data)
-    data = wf.readframes(WAV_CHUNK)
+    with rec.open('output/record.wav', 'wb') as recfile:
+        while True:
+            (data,addr) = mySocket.recvfrom(SIZE)
 
-stream.close()
-p.terminate()
-
-print("END TTS")
-mySocket.sendto('stop',(SERVER_IP,PORT_NUMBER))
-time.sleep(0.5)
-
-# RECORD SAMPLE 
-rec = utility.Recorder(channels=2)
-with rec.open('output/record.wav', 'wb') as recfile2:
-    while True:
-        (data,addr) = mySocket.recvfrom(SIZE)
-
-        if data == 'start':
-        	print("START RECORD")
-        	recfile2.start_recording()
-        
-        if data == 'stop':
-        	print("STOPING RECORD")
-        	recfile2.stop_recording()
-        	with open(join(dirname(__file__), 'output/record.wav'), 'rb') as audio_file:
-       			result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
-    			parsed_json = json.loads(result)
-    			print parsed_json['results'][0]['alternatives'][0]['transcript']
-    			sys.exit()
+            if data == 'start':
+        	   print("START RECORD")
+        	   recfile.start_recording()
+            if data == 'stop':
+        	   print("STOPING RECORD")
+        	   recfile.stop_recording()
