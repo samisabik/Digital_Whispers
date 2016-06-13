@@ -1,62 +1,43 @@
-import json
+import json, os, sys, time, utility
 from os.path import join, dirname
-import os, sys
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
-from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM
-import utility,time
-
-## Socket setup
-SERVER_IP   = '127.0.0.1'
-PORT_NUMBER = 5000
-SIZE = 1024
-hostName = gethostbyname( '0.0.0.0' )
-mySocket = socket( AF_INET, SOCK_DGRAM )
-mySocket.bind( (hostName, PORT_NUMBER) )
-
-## Audio setup
-WAV_CHUNK = 256
 
 ## Watson Congitive API
 text_to_speech = TextToSpeechV1(
     username='96db6c7a-2595-491a-9a62-740dc31e0482',
-    password='azDpe42DlQ5C'
-)
+    password='azDpe42DlQ5C')
 
 speech_to_text = SpeechToTextV1(
     username='a1c7a39e-6618-4274-98f1-6ec5ef7237b8',
-    password='pU5vkvlPIpmZ'
-)
+    password='pU5vkvlPIpmZ')
 
-if __name__ == "__main__":
-    print "Enter some text:",
-    text = raw_input()
+## utils / debug / setup
+STT = "You are running into the old problem with floating point numbers that all numbers cannot be represented."
+voices = ["en-US_LisaVoice","en-US_AllisonVoice","en-GB_KateVoice","en-US_MichaelVoice"]
 
 ## TEXT TO SPEECH API CALL
-    with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file:
-        audio_file.write(text_to_speech.synthesize(text))
+with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file:
+    start = time.time()
+    audio_file.write(text_to_speech.synthesize(STT,voices[1]))
+    end = time.time()
+    print "[OK] STT %.2f" % (end - start) + " s"
 
 ## SPEECH TO TEXT API CALL
-    with open(join(dirname(__file__), 'output/record.wav'), 'rb') as audio_file:
-        result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
-        parsed_json = json.loads(result)
-    	print parsed_json['results'][0]['alternatives'][0]['transcript']
-    	sys.exit()  
+with open(join(dirname(__file__), 'output/synthesize.wav'), 'rb') as audio_file:
+    start = time.time()
+    result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
+    end = time.time()
+    parsed_json = json.loads(result)
+    TTS = parsed_json['results'][0]['alternatives'][0]['transcript']
+    print "[OK] TTS %.2f" % (end - start) + " s"
+    print "[INPUT] " + STT
+    print "[OUTPUT] " + TTS
 
-# PLAY SYNTHESIZE
-    mySocket.sendto('start',(SERVER_IP,PORT_NUMBER))
-    os.system('omxplayer -o local output/synthesize.wav')
-    mySocket.sendto('end',(SERVER_IP,PORT_NUMBER))
+# PLAY STT
+#    os.system('omxplayer -o local output/synthesize.wav')
 
-# RECORD MICROPHONE
-    rec = utility.Recorder(channels=2)
-
-    with rec.open('output/record.wav', 'wb') as recfile:
-        while True:
-            (data,addr) = mySocket.recvfrom(SIZE)
-
-            if data == 'start':
-        	   print("START RECORD")
-        	   recfile.start_recording()
-            if data == 'stop':
-        	   print("STOPING RECORD")
-        	   recfile.stop_recording()
+# RECORD for TTS
+#    rec = utility.Recorder(channels=2)
+#    with rec.open('output/record.wav', 'wb') as recfile:
+#        recfile.start_recording()
+#        recfile.stop_recording()

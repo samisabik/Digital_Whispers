@@ -1,10 +1,6 @@
 import pyaudio,wave
 
 class Recorder(object):
-    '''A recorder class for recording audio to a WAV file.
-    Records in mono by default.
-    '''
-
     def __init__(self, channels=1, rate=44100, frames_per_buffer=1024):
         self.channels = channels
         self.rate = rate
@@ -33,7 +29,6 @@ class RecordingFile(object):
         self.close()
 
     def record(self, duration):
-        # Use a stream with no callback function in blocking mode
         self._stream = self._pa.open(format=pyaudio.paInt16,
                                         channels=self.channels,
                                         rate=self.rate,
@@ -45,7 +40,6 @@ class RecordingFile(object):
         return None
 
     def start_recording(self):
-        # Use a stream with a callback in non-blocking mode
         self._stream = self._pa.open(format=pyaudio.paInt16,
                                         channels=self.channels,
                                         rate=self.rate,
