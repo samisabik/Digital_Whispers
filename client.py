@@ -1,10 +1,7 @@
 #!/usr/bin/env python
-import json, os, sys, time, utility, socket
+import json, os, sys, time, utility, socket, random
 from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
-# tts playback mac import/lib (to be removed)
-from pydub import AudioSegment, playback
-import random
 
 ## Watson Congitive API
 text_to_speech = TextToSpeechV1(
@@ -15,12 +12,12 @@ speech_to_text = SpeechToTextV1(
     username='a1c7a39e-6618-4274-98f1-6ec5ef7237b8',
     password='pU5vkvlPIpmZ')
 
+## SETUP
 STTvoices = ["en-US_AllisonVoice","en-US_LisaVoice","en-GB_KateVoice","en-US_MichaelVoice"]
+rec = utility.Recorder(channels=2, rate=44100, frames_per_buffer=1024)
+text = "This is only a test, please ignore ! I am going to put some shit here and we will see"
 
-
-## utils / debug / setup
-text = "This is only a test, please ignore!"
-
+## MAIN
 if __name__ == "__main__":
 
     while True:
@@ -30,9 +27,8 @@ if __name__ == "__main__":
             audio_file.write(text_to_speech.synthesize(text,STTvoices[random.randrange(0, 4)],"audio/wav"))
             end = time.time()
             print "[OK] STT %.2f" % (end - start) + "s"
-    
-        ## RECORD TTS   
-        rec = utility.Recorder(channels=2)
+
+        ## PLAY + RECORD TTS
         with rec.open('output/record.wav', 'wb') as recfile:
             recfile.start_recording()
             # PLAY STT Linux
@@ -40,7 +36,7 @@ if __name__ == "__main__":
             os.system('aplay output/synthesize.wav')
             recfile.stop_recording()
 
-    ## SPEECH TO TEXT API CALL
+        ## SPEECH TO TEXT API CALL
         with open(join(dirname(__file__), 'output/record.wav'), 'rb') as audio_file:
             start = time.time()
             result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
