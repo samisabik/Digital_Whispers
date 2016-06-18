@@ -13,12 +13,6 @@ speech_to_text = SpeechToTextV1(
     password='pU5vkvlPIpmZ')
 
 ## SETUP
-PORT = 7777
-SERVER_IP = "127.0.0.1"
-BUFFER_SIZE = 1024
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect((SERVER_IP, PORT))
-
 STTvoices = ["en-US_AllisonVoice","en-US_LisaVoice","en-GB_KateVoice","en-US_MichaelVoice"]
 rec = utility.Recorder(channels=2, rate=44100, frames_per_buffer=1024)
 text = "This is only a test, please ignore ! I am going to put some shit here and we will see"
@@ -27,11 +21,6 @@ text = "This is only a test, please ignore ! I am going to put some shit here an
 if __name__ == "__main__":
 
     while True:
-        ## SERVER WAIT
-        client.send('start')
-
-        message = client.recv(BUFFER_SIZE)
-        print "[" + time.strftime('%H:%M:%S') + "] " + SERVER_IP + " > " + str(message)
 
         ## TEXT TO SPEECH API CALL
         with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file:
@@ -40,22 +29,22 @@ if __name__ == "__main__":
             end = time.time()
             print "[OK] STT %.2f" % (end - start) + "s"
 
-        ## PLAY + RECORD TTS
-        #with rec.open('output/record.wav', 'wb') as recfile:
-        #    recfile.start_recording()
-            # PLAY STT Linux
-			#os.system('omxplayer -o local output/synthesize.wav')
-        #    os.system('aplay output/synthesize.wav')
-        #    recfile.stop_recording()
+        # PLAY + RECORD TTS
+        with rec.open('output/record.wav', 'wb') as recfile:
+           recfile.start_recording()
+            PLAY STT Linux
+			os.system('omxplayer -o local output/synthesize.wav')
+           os.system('aplay output/synthesize.wav')
+           recfile.stop_recording()
 
-        # ## SPEECH TO TEXT API CALL
-        # with open(join(dirname(__file__), 'output/record.wav'), 'rb') as audio_file:
-        #     start = time.time()
-        #     result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
-        #     parsed_json = json.loads(result)
-        #     TTS = parsed_json['results'][0]['alternatives'][0]['transcript']
-        #     end = time.time()
-        #     print "[OK] TTS %.2f" % (end - start) + "s"
-        #     print "[INPUT] " + text
-        #     print "[OUTPUT] " + TTS
-        #     text = TTS
+        ## SPEECH TO TEXT API CALL
+        with open(join(dirname(__file__), 'output/record.wav'), 'rb') as audio_file:
+            start = time.time()
+            result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
+            parsed_json = json.loads(result)
+            TTS = parsed_json['results'][0]['alternatives'][0]['transcript']
+            end = time.time()
+            print "[OK] TTS %.2f" % (end - start) + "s"
+            print "[INPUT] " + text
+            print "[OUTPUT] " + TTS
+            text = TTS
