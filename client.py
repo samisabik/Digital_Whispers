@@ -31,11 +31,11 @@ if __name__ == "__main__":
 
         # PLAY + RECORD TTS
         with rec.open('output/record.wav', 'wb') as recfile:
-           recfile.start_recording()
-            PLAY STT Linux
-			os.system('omxplayer -o local output/synthesize.wav')
-           os.system('aplay output/synthesize.wav')
-           recfile.stop_recording()
+            recfile.start_recording()
+            ##PLAY STT Linux
+            #os.system('omxplayer -o local output/synthesize.wav')
+            os.system('aplay output/synthesize.wav')
+            recfile.stop_recording()
 
         ## SPEECH TO TEXT API CALL
         with open(join(dirname(__file__), 'output/record.wav'), 'rb') as audio_file:
