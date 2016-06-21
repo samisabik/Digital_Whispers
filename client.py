@@ -35,7 +35,7 @@ if __name__ == "__main__":
             ##PLAY STT Linux
             #os.system('omxplayer -o local output/synthesize.wav')
             #os.system('aplay output/synthesize.wav')
-	    os.system('play output/synthesize.wav')
+            os.system('play output/synthesize.wav')
             recfile.stop_recording()
 
         ## SPEECH TO TEXT API CALL
