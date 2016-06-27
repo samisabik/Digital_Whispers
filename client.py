@@ -34,12 +34,10 @@ if __name__ == "__main__":
         with rec.open('output/record.wav', 'wb') as recfile:
             
             recfile.start_recording()
-            # PLAY USING OMXPLAYER
-            #os.system('omxplayer -o local output/synthesize.wav')
             # PLAY USING ALSAMIXER
             os.system('aplay output/synthesize.wav')
-	    # PLAY USING SOX
-	    #os.system('play output/synthesize.wav')
+	        # PLAY USING SOX
+	        #os.system('play output/synthesize.wav')
             recfile.stop_recording()
 
         ## SPEECH TO TEXT API CALL
