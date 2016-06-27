@@ -35,9 +35,9 @@ if __name__ == "__main__":
             
             recfile.start_recording()
             # PLAY USING ALSAMIXER
-            os.system('aplay output/synthesize.wav')
-	        # PLAY USING SOX
-	        #os.system('play output/synthesize.wav')
+            #os.system('aplay output/synthesize.wav')
+	    # PLAY USING SOX
+	    os.system('play output/synthesize.wav')
             recfile.stop_recording()
 
         ## SPEECH TO TEXT API CALL
