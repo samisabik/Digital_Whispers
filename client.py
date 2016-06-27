@@ -36,9 +36,7 @@ if __name__ == "__main__":
             recfile.start_recording()
             ##PLAY STT Linux/Mac
             #os.system('omxplayer -o local output/synthesize.wav')
-            #os.system('aplay output/synthesize.wav')
-            # MAC PLAY
-            os.system('play -q output/synthesize.wav')
+            os.system('aplay output/synthesize.wav')
             recfile.stop_recording()
 
         ## SPEECH TO TEXT API CALL
