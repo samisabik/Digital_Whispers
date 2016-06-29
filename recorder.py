@@ -1,24 +1,7 @@
-# -*- coding: utf-8 -*-
-'''recorder.py
-Provides WAV recording functionality via two approaches:
-Blocking mode (record for a set duration):
->>> rec = Recorder(channels=2)
->>> with rec.open('blocking.wav', 'wb') as recfile:
-...     recfile.record(duration=5.0)
-Non-blocking mode (start and stop recording):
->>> rec = Recorder(channels=2)
->>> with rec.open('nonblocking.wav', 'wb') as recfile2:
-...     recfile2.start_recording()
-...     time.sleep(5.0)
-...     recfile2.stop_recording()
-'''
 import pyaudio
 import wave
 
 class Recorder(object):
-    '''A recorder class for recording audio to a WAV file.
-    Records in mono by default.
-    '''
 
     def __init__(self, channels=1, rate=44100, frames_per_buffer=1024):
         self.channels = channels
@@ -48,7 +31,6 @@ class RecordingFile(object):
         self.close()
 
     def record(self, duration):
-        # Use a stream with no callback function in blocking mode
         self._stream = self._pa.open(format=pyaudio.paInt16,
                                         channels=self.channels,
                                         rate=self.rate,
@@ -60,7 +42,6 @@ class RecordingFile(object):
         return None
 
     def start_recording(self):
-        # Use a stream with a callback in non-blocking mode
         self._stream = self._pa.open(format=pyaudio.paInt16,
                                         channels=self.channels,
                                         rate=self.rate,
