@@ -16,7 +16,6 @@ speech_to_text = SpeechToTextV1(
 TTSvoices = ["en-US_AllisonVoice","en-US_LisaVoice","en-GB_KateVoice","en-US_MichaelVoice"]
 rec = utils.Recorder(channels=1)
 text = raw_input("Enter the seed: ")
-#text = "Necessity is the mother of invention, but cheap crap from China is the mother of reverse engineering."
 loopid = 0
 
 ## MAIN
@@ -48,8 +47,8 @@ if __name__ == "__main__":
 
         print "-------------------------------------------"
         print "[+] RUN : " + str(loopid)
-        print "[+] STT :  %.2f" % (endTTS - startTTS) + "s"
-        print "[+] TT    %.2f" % (endSTT - startSTT) + "s"
+        print "[+] STT : %.2f" % (endTTS - startTTS) + "s"
+        print "[+] TTS : %.2f" % (endSTT - startSTT) + "s"
         print "[+] OUT : " + STT
      
         #single client debug loop
