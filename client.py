@@ -15,7 +15,7 @@ speech_to_text = SpeechToTextV1(
 ## SETUP + TOOLS
 TTSvoices = ["en-US_AllisonVoice","en-US_LisaVoice","en-GB_KateVoice","en-US_MichaelVoice"]
 rec = utils.Recorder(channels=2)
-text = "This is only a test, please ignore !"
+text = "Necessity is the mother of invention, but cheap crap from China is the mother of reverse engineering."
 loopid = 0
 
 ## MAIN
