@@ -24,7 +24,7 @@ if __name__ == "__main__":
     while True:
 
         ## TEXT TO SPEECH API CALL
-        with open(join(dirname(__file__), '/output/synthesize.wav'), 'wb') as audio_file:
+        with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file:
             
             startTTS = time.time()
             audio_file.write(text_to_speech.synthesize(text,TTSvoices[random.randrange(0, 4)],"audio/wav"))
@@ -33,11 +33,11 @@ if __name__ == "__main__":
         ## PLAY + REC
         with rec.open('output/record.wav', 'wb') as recfile2:
             recfile2.start_recording()
-            os.system('play -q --ignore-length /output/synthesize.wav')
+            os.system('play -q --ignore-length output/synthesize.wav')
             recfile2.stop_recording()
 
         ## SPEECH TO TEXT API CALL
-        with open(join(dirname(__file__), '/output/record.wav'), 'rb') as audio_file:
+        with open(join(dirname(__file__), 'output/record.wav'), 'rb') as audio_file:
             
             startSTT = time.time()
             result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
