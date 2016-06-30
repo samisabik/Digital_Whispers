@@ -14,7 +14,7 @@ speech_to_text = SpeechToTextV1(
 
 ## SETUP + TOOLS
 TTSvoices = ["en-US_AllisonVoice","en-US_LisaVoice","en-GB_KateVoice","en-US_MichaelVoice"]
-rec = utils.Recorder(channels=2)
+rec = utils.Recorder(channels=1)
 text = "Necessity is the mother of invention, but cheap crap from China is the mother of reverse engineering."
 loopid = 0
 
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     while True:
 
         ## TEXT TO SPEECH API CALL
-        with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file:
+        with open(join(dirname(__file__), '/output/synthesize.wav'), 'wb') as audio_file:
             
             startTTS = time.time()
             audio_file.write(text_to_speech.synthesize(text,TTSvoices[random.randrange(0, 4)],"audio/wav"))
@@ -33,23 +33,24 @@ if __name__ == "__main__":
         ## PLAY + REC
         with rec.open('output/record.wav', 'wb') as recfile2:
             recfile2.start_recording()
-            os.system('play -q --ignore-length output/synthesize.wav')
+            os.system('play -q --ignore-length /output/synthesize.wav')
             recfile2.stop_recording()
 
         ## SPEECH TO TEXT API CALL
-        with open(join(dirname(__file__), 'output/record.wav'), 'rb') as audio_file:
+        with open(join(dirname(__file__), '/output/record.wav'), 'rb') as audio_file:
             
             startSTT = time.time()
             result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
             parsed_json = json.loads(result)
             STT = parsed_json['results'][0]['alternatives'][0]['transcript']
             endSTT = time.time()
-        
-        print "[*] RUN LOOP : " + str(loopid)
-        print "[*] INPUT : " + text
-        print "[*] STT delay :  %.2f" % (endTTS - startTTS) + "s"
-        print "[*] TTS delay :  %.2f" % (endSTT - startSTT) + "s"
-        print "[*] OUTPUT : " + STT
-        #MAC LOOP
+
+        print "-------------------------------------------"
+        print "[+] RUN : " + str(loopid)
+        print "[+] STT :  %.2f" % (endTTS - startTTS) + "s"
+        print "[+] TT    %.2f" % (endSTT - startSTT) + "s"
+        print "[+] OUT : " + STT
+     
+        #single client debug loop
         text = STT
         loopid = loopid + 1
