@@ -46,4 +46,4 @@ echo "Your new hostname is $newhost"
 
 #Press a key to reboot
 read -s -n 1 -p "Press any key to reboot"
-sudo reboot
+reboot
