@@ -13,15 +13,16 @@ tar xvf pa_stable_v19_20140130.tgz
 cd portaudio
 ./configure --without-jack
 make clean && make && make install
-rm -r portaudio
 cd ..
 
 #Install Watson Python SDK
 git clone https://github.com/watson-developer-cloud/python-sdk.git
 cd python-sdk
 python setup.py install
-rm -r python-sdk
 cd ..
+
+# cleanup
+rm -r python-sdk portaudio pa_stable_v19_20140130.tgz
 
 #Set new hostname
 #Copy edited alsa.conf with default USB audio
@@ -45,5 +46,10 @@ sudo sed -i "s/$hostn/$newhost/g" /etc/hostname
 echo "Your new hostname is $newhost"
 
 #Press a key to reboot
-read -s -n 1 -p "Press any key to reboot"
-reboot
+echo "Digital Whisper successfully installed !"
+read -p "Do you want to reboot now (y/n)?" choice
+case "$choice" in
+  y|Y ) reboot;;
+  n|N ) ;;
+  * ) echo "invalid";;
+esac
