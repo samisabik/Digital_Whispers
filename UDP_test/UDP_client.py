@@ -1,20 +1,13 @@
-'''
-    udp socket client
-    Silver Moon
-'''
+import socket, sys
  
-import socket   #for sockets
-import sys  #for exit
- 
-# create dgram udp socket
 try:
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 except socket.error:
     print 'Failed to create socket'
     sys.exit()
  
-host = 'localhost';
-port = 8888;
+host = '192.168.2.194';
+port = 7777;
  
 while(1) :
     msg = raw_input('Enter message to send : ')
