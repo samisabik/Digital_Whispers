@@ -10,9 +10,6 @@ try :
 except socket.error, msg :
     print 'Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
     sys.exit()
-
-
-# Bind socket to local host and port
 try:
     s.bind((HOST, PORT))
 except socket.error , msg:
@@ -21,15 +18,20 @@ except socket.error , msg:
 
 print 'Socket bind complete'
 
-#now keep talking with the client
+A = socket.gethostbyname('whisper03')
+B = socket.gethostbyname('whisper01')
+print A
+print B
+
 while 1:
-    # receive data from client (data, addr)
     d = s.recvfrom(1024)
     data = d[0]
     addr = d[1]
-    if not data:
-        break
-    reply = 'OK...' + data
-    s.sendto(reply , addr)
-    print 'Message[' + addr[0] + ':' + str(addr[1]) + '] - ' + data.strip()
+
+    s.sendto('test' , addr)
+    s.sendto('test', (A, PORT))
+
+    #s.sendto('test++' , addr2)
+
+    print "[+] " + str(addr) + ' : ' + data.strip()
 s.close()
