@@ -10,7 +10,7 @@ host = '192.168.2.194';
 port = 2222;
  
 while(1) :
-     try:
+    try:
         d = s.recvfrom(1024)
         reply = d[0]
         addr = d[1]
