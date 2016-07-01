@@ -7,7 +7,7 @@ except socket.error:
     sys.exit()
  
 host = '192.168.2.194';
-port = 7777;
+port = 2222;
  
 while(1) :
     msg = raw_input('Enter message to send : ')

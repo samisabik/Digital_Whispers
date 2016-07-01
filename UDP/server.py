@@ -1,7 +1,7 @@
 import socket, sys
 
 HOST = ''   # Symbolic name meaning all available interfaces
-PORT = 123  # Arbitrary non-privileged port
+PORT = 2222  # Arbitrary non-privileged port
 
 # Datagram (udp) socket
 try :
