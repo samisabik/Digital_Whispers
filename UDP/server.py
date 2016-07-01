@@ -18,13 +18,15 @@ except socket.error , msg:
 
 print 'Socket bind complete'
 
-A = socket.gethostbyname('whisper03')
-B = socket.gethostbyname('whisper01')
+A = socket.gethostbyname('whisper01')
+B = socket.gethostbyname('whisper02')
+C = socket.gethostbyname('whisper03')
 print A
 print B
 
 while 1:
-    s.sendto('test', (A,PORT))
-    s.sendto('test', (B,PORT))
+    s.sendto('test on 01', (A,PORT))
+    s.sendto('test on 02', (B,PORT))
+    s.sendto('test on 03', (C,PORT))
     time.sleep(10)
 s.close()
