@@ -1,4 +1,4 @@
-import socket, sys
+import socket, sys, time
 
 HOST = ''   # Symbolic name meaning all available interfaces
 PORT = 2222  # Arbitrary non-privileged port
@@ -24,14 +24,7 @@ print A
 print B
 
 while 1:
-    d = s.recvfrom(1024)
-    data = d[0]
-    addr = d[1]
-
-    s.sendto('test' , addr)
-    s.sendto('test', (A, PORT))
-
-    #s.sendto('test++' , addr2)
-
-    print "[+] " + str(addr) + ' : ' + data.strip()
+    s.sendto('test', (A,PORT))
+    s.sendto('test', (B,PORT))
+    time.sleep(10)
 s.close()

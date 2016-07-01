@@ -1,21 +1,12 @@
-import socket, sys, time
- 
-try:
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-except socket.error:
-    print 'Failed to create socket'
-    sys.exit()
- 
-host = '192.168.2.194';
-port = 2222;
- 
-while(1) :
-    try:
-        d = s.recvfrom(1024)
-        reply = d[0]
-        addr = d[1]
-         
-        print 'Server reply : ' + reply
-    except socket.error, msg:
-        print 'Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
-        sys.exit()
+import socket
+
+UDP_IP = ""
+UDP_PORT = 2222
+
+sock = socket.socket(socket.AF_INET, # Internet
+                     socket.SOCK_DGRAM) # UDP
+sock.bind((UDP_IP, UDP_PORT))
+
+while True:
+    data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
+    print "received message:", data
