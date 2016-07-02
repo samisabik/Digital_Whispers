@@ -1,7 +1,7 @@
 import socket, sys, time, datetime
 
-HOST = ''
-PORT = 2222 
+UDP_HOST = ''
+UDP_PORT = 2222 
 NUM_CLIENT = 3
 client = [None] * NUM_CLIENT
 
@@ -9,15 +9,15 @@ try :
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     print '## Socket created'
 except socket.error, msg :
-    print 'Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
+    print '##Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
     sys.exit()
 try:
-    s.bind((HOST, PORT))
+    s.bind((UDP_HOST, UDP_PORT))
 except socket.error , msg:
-    print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
+    print '##Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
     sys.exit()
 print '## Socket bind complete'
-
+print "## CLIENT LIST"
 for x in range(NUM_CLIENT):
     client[x] = socket.gethostbyname('whisper_'+str(x))
     print "whisper_" + str(x) + " @ " + client[x]
