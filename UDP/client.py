@@ -1,12 +1,15 @@
-import socket
+import socket,time
 
 UDP_IP = ""
 UDP_PORT = 2222
+UDP_SERVER = "192.168.2.194"
 
 sock = socket.socket(socket.AF_INET, # Internet
                      socket.SOCK_DGRAM) # UDP
 sock.bind((UDP_IP, UDP_PORT))
 
 while True:
-    data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
-    print "received message:", data
+        sock.sendto('start_T', (UDP_SERVER,UDP_PORT))
+        time.sleep(10)
+        sock.sendto('stop_T', (UDP_SERVER,UDP_PORT))
+        time.sleep(10)

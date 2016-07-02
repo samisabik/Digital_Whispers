@@ -21,12 +21,18 @@ print '## Socket bind complete'
 for x in range(NUM_CLIENT):
     client[x] = socket.gethostbyname('whisper_'+str(x))
     print "whisper_" + str(x) + " @ " + client[x]
-
+print "## START SERVER LISTEN"
 while 1:
-    for i in range(NUM_CLIENT):
-        ts = time.time()
-        st = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
-        s.sendto(st + ': WHISPER_'+ str(i) + ' ', (client[i],PORT))
-        time.sleep(5)
+
+    data, addr = s.recvfrom(1024)
+
+    print "[+] RECEIVED " + data + " FROM " + str(socket.gethostbyaddr(addr[0])[0])
+
+    if (data == 'start_T'):
+        s.sendto('start_L', (client[client.index(addr[0]) + 1],PORT))
+        print "[+] SEND start_L TO " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
+    if (data == 'stop_T'):
+        s.sendto('stop_L', (client[client.index(addr[0]) + 1],PORT))
+        print "[+] SEND stop_L TO " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
 
 s.close()
