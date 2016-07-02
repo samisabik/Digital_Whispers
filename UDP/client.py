@@ -1,4 +1,4 @@
-import socket,time
+import socket,time,os
 
 UDP_IP = ""
 UDP_PORT = 2222
@@ -7,17 +7,19 @@ SERVER_IP = "192.168.2.194"
 s = socket.socket(socket.AF_INET, # Internet
                      socket.SOCK_DGRAM) # UDP
 s.bind((UDP_IP, UDP_PORT))
+os.system('clear')
 
 while True:
 	data, addr = s.recvfrom(1024)
 
 	if (data == "start_L"):
-		print "i'm starting to listen"
+		print "START listen"
 	if (data == "stop_L"):
-		print "i'm stopping to listen"
+		print "STOP listen"
+		time.sleep(5)
 		s.sendto('start_T', (SERVER_IP,UDP_PORT))
-		print "i'm starting to talk"
-        time.sleep(10)
+		print "START talk"
+        time.sleep(15)
         s.sendto('stop_T', (SERVER_IP,UDP_PORT))
-        print "i'm stopping to talk"
+        print "STOP talk"
 
