@@ -1,12 +1,13 @@
-import socket, sys, time
+import socket, sys, time, datetime
 
-HOST = ''   # Symbolic name meaning all available interfaces
-PORT = 2222  # Arbitrary non-privileged port
+HOST = ''
+PORT = 2222 
+NUM_CLIENT = 3
+client = [None] * NUM_CLIENT
 
-# Datagram (udp) socket
 try :
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    print 'Socket created'
+    print '## Socket created'
 except socket.error, msg :
     print 'Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
     sys.exit()
@@ -15,18 +16,17 @@ try:
 except socket.error , msg:
     print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
     sys.exit()
+print '## Socket bind complete'
 
-print 'Socket bind complete'
-
-A = socket.gethostbyname('whisper01')
-B = socket.gethostbyname('whisper02')
-C = socket.gethostbyname('whisper03')
-print A
-print B
+for x in range(NUM_CLIENT):
+    client[x] = socket.gethostbyname('whisper_'+str(x))
+    print "whisper_" + str(x) + " @ " + client[x]
 
 while 1:
-    s.sendto('test on 01', (A,PORT))
-    s.sendto('test on 02', (B,PORT))
-    s.sendto('test on 03', (C,PORT))
-    time.sleep(10)
+    for i in range(NUM_CLIENT):
+        ts = time.time()
+        st = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
+        s.sendto(st + ': WHISPER_'+ str(i) + ' ', (client[i],PORT))
+        time.sleep(5)
+
 s.close()
