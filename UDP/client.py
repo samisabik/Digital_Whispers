@@ -10,6 +10,8 @@ except socket.error, msg :
     print '##Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
     sys.exit()
 
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
 try:
     s.bind((UDP_HOST, UDP_PORT))
 except socket.error , msg:

@@ -32,8 +32,9 @@ print ""
 ## DEBUG SEED
 while 1:
 
-    s.sendto('start_L', (client[0],UDP_PORT))
     text = raw_input("Please enter your name: ")
+    s.sendto('start_L', (client[0],UDP_PORT))
+    time.sleep(10)
     s.sendto('stop_L', (client[0],UDP_PORT))
 
     while (run_id < MAX_LOOP):
