@@ -4,9 +4,10 @@ from termcolor import colored
 
 UDP_HOST = ''
 UDP_PORT = 2222 
-NUM_CLIENT = 3
+NUM_CLIENT = 4
 client = [None] * NUM_CLIENT
 run_id = 0
+MAX_LOOP = 5
 
 try :
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -29,30 +30,34 @@ print colored('_________________________','magenta',attrs=['bold'])
 print ""
 
 ## DEBUG SEED
-s.sendto('stop_L', (client[randint(0,len(client)-1)],UDP_PORT))
-
 while 1:
 
-    data, addr = s.recvfrom(1024)
+    s.sendto('start_L', (client[0],UDP_PORT))
+    text = raw_input("Please enter your name: ")
+    s.sendto('stop_L', (client[0],UDP_PORT))
 
-    ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
-    print ts + data + colored('\t<<<', 'red', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(addr[0])[0])
-    
-    if (client.index(addr[0]) + 1 >= len(client)):
-        client_id = 0
-    else :
-        client_id = client.index(addr[0]) + 1
+    while (run_id < MAX_LOOP):
 
-    if (data == 'start_T'):
-        run_id = run_id + 1
-        s.sendto('start_L', (client[client_id],UDP_PORT))
+        data, addr = s.recvfrom(1024)
+
         ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
-        print ts +"start_L " + colored('\t>>>', 'green', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(client[client_id])[0])
-    
-    if (data == 'stop_T'):
-        ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
-        s.sendto('stop_L', (client[client_id],UDP_PORT))
-        print ts +"stop_L " + colored('\t>>>', 'green', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(client[client_id])[0])
-        print colored('\t\t\t'+ str(run_id),'magenta',attrs=['bold'])
+        print ts + data + colored('\t<<<', 'red', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(addr[0])[0])
+        
+        if (client.index(addr[0]) + 1 >= len(client)):
+            client_id = 0
+        else :
+            client_id = client.index(addr[0]) + 1
+
+        if (data == 'start_T'):
+            run_id = run_id + 1
+            s.sendto('start_L', (client[client_id],UDP_PORT))
+            ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
+            print ts +"start_L " + colored('\t>>>', 'green', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(client[client_id])[0])
+        
+        if (data == 'stop_T'):
+            ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
+            s.sendto('stop_L', (client[client_id],UDP_PORT))
+            print ts +"stop_L " + colored('\t>>>', 'green', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(client[client_id])[0])
+            print colored('['+ str(run_id) + ']','magenta',attrs=['bold'])
 
 s.close()
