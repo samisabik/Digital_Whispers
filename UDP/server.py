@@ -6,7 +6,6 @@ UDP_HOST = ''
 UDP_PORT = 2222 
 NUM_CLIENT = 4
 client = [None] * NUM_CLIENT
-run_id = 0
 MAX_LOOP = 5
 
 try :
@@ -21,18 +20,21 @@ except socket.error , msg:
     sys.exit()
 
 os.system('clear')
-print colored('_______ CLIENT IP _______','magenta',attrs=['bold'])
+print colored('\t_______ CLIENT IP _______','magenta',attrs=['bold'])
 print ""
 for x in range(NUM_CLIENT):
     client[x] = socket.gethostbyname('whisper_'+str(x))
-    print "whisper_" + str(x) + " at " + client[x]
-print colored('_________________________','magenta',attrs=['bold'])
+    print "\twhisper_" + str(x) + " at " + client[x]
+print colored('\t_________________________','magenta',attrs=['bold'])
 print ""
 
 ## DEBUG SEED
-while 1:
-
-    text = raw_input("Please enter your name: ")
+while True:
+    
+    run_id = 0
+    print ""
+    text = raw_input(" Enter some text : ")
+    print ""
     s.sendto('start_L', (client[0],UDP_PORT))
     time.sleep(10)
     s.sendto('stop_L', (client[0],UDP_PORT))
@@ -50,7 +52,6 @@ while 1:
             client_id = client.index(addr[0]) + 1
 
         if (data == 'start_T'):
-            run_id = run_id + 1
             s.sendto('start_L', (client[client_id],UDP_PORT))
             ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
             print ts +"start_L " + colored('\t>>>', 'green', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(client[client_id])[0])
@@ -60,5 +61,7 @@ while 1:
             s.sendto('stop_L', (client[client_id],UDP_PORT))
             print ts +"stop_L " + colored('\t>>>', 'green', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(client[client_id])[0])
             print colored('['+ str(run_id) + ']','magenta',attrs=['bold'])
+            run_id = run_id + 1
+
 
 s.close()
