@@ -53,6 +53,6 @@ while 1:
         ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
         s.sendto('stop_L', (client[client_id],UDP_PORT))
         print ts +"stop_L " + colored('\t>>>', 'green', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(client[client_id])[0])
-        print ts + colored('              '+ str(run_id),'magenta',attrs=['bold'])
+        print colored('\t\t\t'+ str(run_id),'magenta',attrs=['bold'])
 
 s.close()
