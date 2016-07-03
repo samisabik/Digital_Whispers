@@ -1,6 +1,6 @@
 import socket,time,os,datetime
 
-UDP_IP = ""
+UDP_HOST = ""
 UDP_PORT = 2222
 SERVER_IP = "192.168.2.194"
 
