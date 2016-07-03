@@ -18,27 +18,33 @@ except socket.error , msg:
     sys.exit()
 
 os.system('clear')
-print "####### CLIENT IP #######"
+print colored('_______ CLIENT IP _______','magenta',attrs=['bold'])
+print ""
 for x in range(NUM_CLIENT):
     client[x] = socket.gethostbyname('whisper_'+str(x))
-    print "whisper_" + str(x) + " @ " + client[x]
-print "#########################"
+    print "whisper_" + str(x) + " at " + client[x]
+print colored('_________________________','magenta',attrs=['bold'])
 print ""
 while 1:
 
     data, addr = s.recvfrom(1024)
 
     ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
-    print ts + " " + data + " " + colored('FROM', 'red', attrs=['bold']) + " " + str(socket.gethostbyaddr(addr[0])[0])
+    print ts + " " + data + " " + colored('\t<', 'red', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(addr[0])[0])
+    
+    if (client.index(addr[0]) + 1 > len(client)):
+        client_id = 0
+    else :
+        client_id = client.index(addr[0]) + 1
 
     if (data == 'start_T'):
-        s.sendto('start_L', (client[client.index(addr[0]) + 1],UDP_PORT))
+        s.sendto('start_L', (client[client_id],UDP_PORT))
         ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
-        print ts +" start_L " + colored('TO', 'green', attrs=['bold']) + " " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
+        print ts +" start_L " + colored('\t>', 'green', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
     
     if (data == 'stop_T'):
         ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
-        s.sendto('stop_L', (client[client.index(addr[0]) + 1],UDP_PORT))
-        print ts +" stop_L " + colored('TO', 'green', attrs=['bold']) + " " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
+        s.sendto('stop_L', (client[client_id],UDP_PORT))
+        print ts +" stop_L " + colored('\t>', 'green', attrs=['bold']) + "\t" + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
 
 s.close()
