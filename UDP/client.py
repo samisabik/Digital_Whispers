@@ -9,8 +9,7 @@ try :
 except socket.error, msg :
     print '##Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
     sys.exit()
-    
-    s.close()
+
 try:
     s.bind((UDP_HOST, UDP_PORT))
 except socket.error , msg:
