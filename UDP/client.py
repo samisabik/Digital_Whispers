@@ -4,9 +4,16 @@ UDP_IP = ""
 UDP_PORT = 2222
 SERVER_IP = "192.168.2.194"
 
-s = socket.socket(socket.AF_INET, # Internet
-                     socket.SOCK_DGRAM) # UDP
-s.bind((UDP_IP, UDP_PORT))
+try :
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+except socket.error, msg :
+    print '##Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
+    sys.exit()
+try:
+    s.bind((UDP_HOST, UDP_PORT))
+except socket.error , msg:
+    print '##Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
+    sys.exit()
 
 os.system('clear')
 print "## STARTING ON : " + socket.gethostname()
