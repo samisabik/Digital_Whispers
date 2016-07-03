@@ -29,12 +29,14 @@ while True:
 	
 	if (data == "stop_L"):
 		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
-		print ts + " STOP listen"
-		print ts + "now STT"
+		print " STOP listen"
+		print "now STT + TTS"
 		time.sleep(5)
-		print ts + "now TTS"
-		print ts + "send listen to next"
+		print "talk + send listen to next"
 		s.sendto('start_T', (SERVER_IP,UDP_PORT))
+		time.sleep(5)
+		print "end talk + stop listen to next"
+		s.sendto('stop_T', (SERVER_IP,UDP_PORT))
 
 
 
