@@ -34,7 +34,7 @@ while True:
 		time.sleep(5)
 		print ts + "now TTS"
 		print ts + "send listen to next"
-		sock.sendto('start_T', (UDP_SERVER,UDP_PORT))
+		s.sendto('start_T', (UDP_SERVER,UDP_PORT))
 
 
 
