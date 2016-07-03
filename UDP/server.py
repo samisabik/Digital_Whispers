@@ -22,22 +22,25 @@ for x in range(NUM_CLIENT):
     client[x] = socket.gethostbyname('whisper_'+str(x))
     print "whisper_" + str(x) + " @ " + client[x]
 print "#########################"
+print ""
 while 1:
 
     data, addr = s.recvfrom(1024)
+    
     ts = time.time()
     st = datetime.datetime.fromtimestamp(ts).strftime('[%H:%M:%S]')
-    print st + " RECEIVED " + data + " FROM " + str(socket.gethostbyaddr(addr[0])[0])
+    print st + " " + data + " FROM " + str(socket.gethostbyaddr(addr[0])[0])
 
     if (data == 'start_T'):
         s.sendto('start_L', (client[client.index(addr[0]) + 1],UDP_PORT))
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('[%H:%M:%S]')
-        print st + " SEND start_L TO " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
+        print st + " start_L TO " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
+    
     if (data == 'stop_T'):
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('[%H:%M:%S]')
         s.sendto('stop_L', (client[client.index(addr[0]) + 1],UDP_PORT))
-        print st +" SEND stop_L TO " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
+        print st +" stop_L TO " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
 
 s.close()
