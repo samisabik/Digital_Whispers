@@ -17,8 +17,10 @@ while True:
 	data, addr = s.recvfrom(1024)
 
 	if (data == "start_L"):
-		print "START listen"
+        ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
+		print ts + " START listen"
 	
 	if (data == "stop_L"):
-		print "STOP listen"
+        ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
+		print ts + " STOP listen"
 
