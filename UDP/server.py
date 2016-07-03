@@ -1,4 +1,5 @@
 import socket, sys, time, datetime, os
+from termcolor import colored
 
 UDP_HOST = ''
 UDP_PORT = 2222 
@@ -28,16 +29,16 @@ while 1:
     data, addr = s.recvfrom(1024)
 
     ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
-    print ts + " " + data + " FROM " + str(socket.gethostbyaddr(addr[0])[0])
+    print ts + " " + data + " " + colored('FROM', 'red', attrs=['bold']) + " " + str(socket.gethostbyaddr(addr[0])[0])
 
     if (data == 'start_T'):
         s.sendto('start_L', (client[client.index(addr[0]) + 1],UDP_PORT))
         ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
-        print ts + " start_L TO " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
+        print ts +" start_L " + colored('TO', 'green', attrs=['bold']) + " " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
     
     if (data == 'stop_T'):
         ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
         s.sendto('stop_L', (client[client.index(addr[0]) + 1],UDP_PORT))
-        print ts +" stop_L TO " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
+        print ts +" stop_L " + colored('TO', 'green', attrs=['bold']) + " " + str(socket.gethostbyaddr(client[client.index(addr[0]) + 1])[0])
 
 s.close()

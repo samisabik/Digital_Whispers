@@ -30,4 +30,10 @@ while True:
 	if (data == "stop_L"):
 		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
 		print ts + " STOP listen"
+		print ts + "now STT"
+		time.sleep(5)
+		print ts + "now TTS"
+		print ts + "send listen to next"
+
+
 
