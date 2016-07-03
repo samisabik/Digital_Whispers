@@ -24,18 +24,18 @@ while True:
 	data, addr = s.recvfrom(1024)
 
 	if (data == "start_L"):
-		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
-		print ts + " START LISTEN"
+		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
+		print ts + "START LISTEN"
 	
 	if (data == "stop_L"):
-		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S]')
-		print " STOP LISTEN"
-		print "now STT + TTS"
+		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
+		print ts + "STOP LISTEN"		
 		time.sleep(5)
-		print "START TALK"
-		s.sendto('start_T', (SERVER_IP,UDP_PORT))
+		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
+		print ts + "START TALK"
 		time.sleep(5)
-		print "STOP TALK"
+		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
+		print ts + "STOP TALK"
 		s.sendto('stop_T', (SERVER_IP,UDP_PORT))
 
 
