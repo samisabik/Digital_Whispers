@@ -2,11 +2,13 @@ import socket, sys, time, datetime, os
 from random import randint
 from termcolor import colored
 
+
 UDP_HOST = ''
-UDP_PORT = 2222 
-NUM_CLIENT = 4
+UDP_PORT = raw_input('Enter UDP_PORT: ')
+NUM_CLIENT = raw_input('Enter NUM_CLIENT: ')
+MAX_LOOP = raw_input('Enter MAX_LOOP: ')
 client = [None] * NUM_CLIENT
-MAX_LOOP = 5
+
 
 try :
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
