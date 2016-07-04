@@ -18,6 +18,8 @@ except socket.error , msg:
     print '##Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
     sys.exit()
 
+SERVER_IP = socket.gethostbyname('whisper_server')
+
 os.system('clear')
 print "## STARTING ON : " + socket.gethostname()
 print ""
