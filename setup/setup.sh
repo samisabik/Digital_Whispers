@@ -27,29 +27,3 @@ rm -r python-sdk portaudio pa_stable_v19_20140130.tgz
 #Set new hostname
 #Copy edited alsa.conf with default USB audio
 cp alsa.conf /usr/share/alsa/alsa.conf
-
-#Assign existing hostname to $hostn
-hostn=$(cat /etc/hostname)
-
-#Display existing hostname
-echo "Existing hostname is $hostn"
-
-#Ask for new hostname $newhost
-echo "Enter new hostname: "
-read newhost
-
-#change hostname in /etc/hosts & /etc/hostname
-sudo sed -i "s/$hostn/$newhost/g" /etc/hosts
-sudo sed -i "s/$hostn/$newhost/g" /etc/hostname
-
-#display new hostname
-echo "Your new hostname is $newhost"
-
-#Press a key to reboot
-echo "Digital Whisper successfully installed !"
-read -p "Do you want to reboot now (y/n)?" choice
-case "$choice" in
-  y|Y ) reboot;;
-  n|N ) ;;
-  * ) echo "invalid";;
-esac
