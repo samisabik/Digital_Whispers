@@ -4,9 +4,9 @@ from termcolor import colored
 
 
 UDP_HOST = ''
-UDP_PORT = raw_input('Enter UDP_PORT: ')
-NUM_CLIENT = raw_input('Enter NUM_CLIENT: ')
-MAX_LOOP = raw_input('Enter MAX_LOOP: ')
+UDP_PORT = int(raw_input('Enter UDP_PORT: '))
+NUM_CLIENT = int(raw_input('Enter NUM_CLIENT: '))
+MAX_LOOP = int(raw_input('Enter MAX_LOOP: '))
 client = [None] * NUM_CLIENT
 
 
