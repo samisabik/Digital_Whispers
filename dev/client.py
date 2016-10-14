@@ -2,7 +2,9 @@ import socket,time,os,datetime,sys
 
 UDP_HOST = ""
 UDP_PORT = 2222
-SERVER_IP = "192.168.2.194"
+SERVER_IP = raw_input("Server IP : ")
+
+print SERVER_IP
 
 try :
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

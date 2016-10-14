@@ -1,6 +1,5 @@
 import pyaudio
 import wave
-test
 
 class Recorder(object):
 
