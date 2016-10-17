@@ -6,8 +6,8 @@ hostn=$(cat /etc/hostname)
 echo "Existing hostname is $hostn"
 echo "Enter new hostname: "
 read newhost
-sudo sed -i "s/$hostn/$newhost/g" /etc/hosts
-sudo sed -i "s/$hostn/$newhost/g" /etc/hostname
+sed -i "s/$hostn/$newhost/g" /etc/hosts
+sed -i "s/$hostn/$newhost/g" /etc/hostname
 echo "Your new hostname is $newhost"
 
 #Global apt setup + cleanup
