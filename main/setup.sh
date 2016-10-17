@@ -12,7 +12,7 @@ echo "Your new hostname is $newhost"
 
 #Global apt setup + cleanup
 apt-get update && apt-get -y upgrade
-apt-get install -y sudo git build-essential python python-dev python-setuptools libportaudio2 libportaudiocpp0 portaudio19-dev
+apt-get install -y sudo git build-essential python python-dev python-setuptools libportaudio2 libportaudiocpp0 portaudio19-dev sox
 apt-get -y remove --auto-remove --purge 'libx11-.*'
 apt-get -y autoremove --purge
 
@@ -35,8 +35,9 @@ cd python-sdk
 python setup.py install
 cd ..
 
-# cleanup
+# cleanup + setup final build
 rm -r python-sdk portaudio pyaudio pa_stable_v19_20140130.tgz
+mkdir output
 
 #Press a key to reboot
 read -s -n 1 -p "Press any key to reboot"
