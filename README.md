@@ -1,1 +1,1 @@
-##NanoPI @ Digital Whisper
+##Digital Whispers
