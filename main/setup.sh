@@ -12,7 +12,7 @@ echo "Your new hostname is $newhost"
 
 #Global apt setup + cleanup
 apt-get update && apt-get -y upgrade
-apt-get install -y sudo git build-essential python python-dev python-setuptools libportaudio2 libportaudiocpp0 portaudio19-dev sox
+apt-get install -y git build-essential python python-dev python-setuptools libportaudio2 libportaudiocpp0 portaudio19-dev
 apt-get -y remove --auto-remove --purge 'libx11-.*'
 apt-get -y autoremove --purge
 
@@ -28,6 +28,7 @@ cd ..
 git clone http://people.csail.mit.edu/hubert/git/pyaudio.git
 cd pyaudio
 python setup.py install
+cd ..
 
 #Install Watson Python SDK
 git clone https://github.com/watson-developer-cloud/python-sdk.git
@@ -41,4 +42,4 @@ mkdir output
 
 #Press a key to reboot
 read -s -n 1 -p "Press any key to reboot"
-sudo reboot
+reboot
