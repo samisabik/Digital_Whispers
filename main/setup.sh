@@ -36,10 +36,15 @@ cd python-sdk
 python setup.py install
 cd ..
 
-# cleanup + setup final build
-rm -r python-sdk portaudio pyaudio pa_stable_v19_20140130.tgz
-mkdir output
+## Install SoX
+wget http://internode.dl.sourceforge.net/project/sox/sox/14.4.2/sox-14.4.2.tar.gz
+tar xvf sox-14.4.2.tar.gz
+cd sox-14.4.2
+./configure
+make && make install
+ldconfig
+cd ..
 
-#Press a key to reboot
-read -s -n 1 -p "Press any key to reboot"
-reboot
+# cleanup
+rm -r python-sdk portaudio pyaudio pa_stable_v19_20140130.tgz sox-14.4.2.tar.gz sox-14.4.2
+
