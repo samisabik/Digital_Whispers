@@ -41,7 +41,7 @@ wget http://internode.dl.sourceforge.net/project/sox/sox/14.4.2/sox-14.4.2.tar.g
 tar xvf sox-14.4.2.tar.gz
 cd sox-14.4.2
 ./configure
-make && make install
+make -s && make install
 ldconfig
 cd ..
 
