@@ -52,8 +52,11 @@ rm -r python-sdk portaudio pyaudio pa_stable_v19_20140130.tgz sox-14.4.2.tar.gz 
 #Modify alsa.conf
 cp alsa.conf /usr/share/alsa/alsa.conf
 
+#add GPIO to startup
+cp rc.local /etc/rc.local
+
 #Modify .fex to support I2S Audio
-mv custom.fex /boot/custom.fex
+cp custom.fex /boot/custom.fex
 cd /boot
 fex2bin custom.fex > script.bin
 reboot
