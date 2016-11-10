@@ -26,4 +26,6 @@ if __name__ == "__main__":
         audio_file.write(text_to_speech.synthesize(text,TTSvoices[random.randrange(0, 4)],"audio/wav"))
         endTTS = time.time()
 
-    os.system('play -q --ignore-length output/synthesize.wav')
+    #os.system('play -q --ignore-length output/synthesize.wav')
+    os.system('aplay output/synthesize.wav')
+
