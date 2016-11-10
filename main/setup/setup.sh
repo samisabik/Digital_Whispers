@@ -49,6 +49,9 @@ cd ..
 # cleanup
 rm -r python-sdk portaudio pyaudio pa_stable_v19_20140130.tgz sox-14.4.2.tar.gz sox-14.4.2
 
+#Modify alsa.conf
+cp alsa.conf /usr/share/alsa/alsa.conf
+
 #Modify .fex to support I2S Audio
 mv custom.fex /boot/custom.fex
 cd /boot
