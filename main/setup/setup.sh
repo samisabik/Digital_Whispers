@@ -12,7 +12,7 @@ echo "Your new hostname is $newhost"
 
 #Global apt setup + cleanup
 apt-get update && apt-get -y upgrade
-apt-get install -y git sunxi-tools build-essential python python-dev 
+apt-get install -y git sunxi-tools build-essential python python-dev python-setuptools
 python-setuptools libportaudio2 libportaudiocpp0 portaudio19-dev
 apt-get -y remove --auto-remove --purge 'libx11-.*'
 apt-get -y autoremove --purge
