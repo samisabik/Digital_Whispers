@@ -1,6 +1,9 @@
 #!/bin/bash
 clear
 
+## Create new user
+sudo adduser digital
+
 ## Define new HOSTNAME
 hostn=$(cat /etc/hostname)
 echo "Existing hostname is $hostn"
