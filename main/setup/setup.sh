@@ -1,6 +1,5 @@
 #!/bin/bash
 clear
-sudo su
 
 ## Define new HOSTNAME
 hostn=$(cat /etc/hostname)
@@ -16,6 +15,7 @@ apt-get update && apt-get -y upgrade
 apt-get install -y git build-essential python python-dev python-setuptools libportaudio2 libportaudiocpp0 portaudio19-dev
 apt-get -y remove --auto-remove --purge 'libx11-.*'
 apt-get -y autoremove --purge
+apt-get -y clean
 
 ## Install Portaudio
 wget http://portaudio.com/archives/pa_stable_v19_20140130.tgz
