@@ -11,8 +11,8 @@ sed -i "s/$hostn/$newhost/g" /etc/hostname
 echo "Your new hostname is $newhost"
 
 ## Global apt setup + cleanup
-apt-get update && apt-get -y upgrade
-apt-get install -y git build-essential python python-dev python-setuptools libportaudio2 libportaudiocpp0 portaudio19-dev
+apt-get update && sudo apt-get -y upgrade
+apt-get install -y git build-essential sox libsox-fmt-all python python-dev python-setuptools libportaudio2 libportaudiocpp0 portaudio19-dev
 apt-get -y remove --auto-remove --purge 'libx11-.*'
 apt-get -y autoremove --purge
 apt-get -y clean
@@ -37,16 +37,11 @@ cd python-sdk
 python setup.py install
 cd ..
 
-## Install SoX
-wget http://internode.dl.sourceforge.net/project/sox/sox/14.4.2/sox-14.4.2.tar.gz
-tar xvf sox-14.4.2.tar.gz
-cd sox-14.4.2
-./configure
-make -s && make install
-ldconfig
-cd ..
+## Setup USB Soundcard and WIFI
+mv asound.conf /etc/asound.conf
+mv wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 # cleanup and reboot
-rm -r python-sdk portaudio pyaudio pa_stable_v19_20140130.tgz sox-14.4.2.tar.gz sox-14.4.2
+rm -r python-sdk portaudio pyaudio pa_stable_v19_20140130.tgz
 reboot
 
