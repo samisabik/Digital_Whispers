@@ -3,7 +3,7 @@ import wave
 
 class Recorder(object):
 
-    def __init__(self, channels=1, rate=44100, frames_per_buffer=1024):
+    def __init__(self, channels=1, rate=44100, frames_per_buffer=512):
         self.channels = channels
         self.rate = rate
         self.frames_per_buffer = frames_per_buffer
