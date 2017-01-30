@@ -37,6 +37,6 @@ sudo mv asound.conf /etc/asound.conf
 mv wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 # cleanup and reboot
-sudo rm -r python-sdk portaudio pyaudio pa_stable_v190600_20161030.tgz
+sudo rm -r python-sdk portaudio pa_stable_v190600_20161030.tgz
 reboot
 
