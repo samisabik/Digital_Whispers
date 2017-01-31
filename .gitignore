@@ -1,3 +1,2 @@
 .DS_Store
-/tools
-/doc
+/main/setup/wpa_supplicant.conf
