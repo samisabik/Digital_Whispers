@@ -40,6 +40,8 @@ echo "Setting up WIFI and USB Soundcard"
 echo "========================="
 sudo mv asound.conf /etc/asound.conf
 mv wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+amixer set Headphone 20%
+amixer set Mic 50%
 
 echo "Clean up"
 echo "========================="
@@ -56,7 +58,7 @@ sed -i "s/$hostn/$newhost/g" /etc/hostname
 echo "new hostname: $newhost"
 
 echo "Reset pre-owned user"
-chown -R pi: ~/Digital_Whispers
+chown -R pi: /home/pi/Digital_Whispers
 
 echo "Reboot !"
 echo "=========================="
