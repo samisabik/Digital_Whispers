@@ -10,8 +10,6 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
-
-
 echo "Installing dependencies..."
 echo "=========================="
 sudo apt-get update && sudo apt-get -y upgrade
