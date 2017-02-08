@@ -56,7 +56,7 @@ sed -i "s/$hostn/$newhost/g" /etc/hostname
 echo "new hostname: $newhost"
 
 echo "Reset pre-owned user"
-chown -R pi: ../../Digital_Whispers
+chown -R pi: ~/Digital_Whispers
 
 echo "Reboot !"
 echo "=========================="
