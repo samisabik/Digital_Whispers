@@ -3,6 +3,7 @@ import json, os, sys, time, random, utils
 from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
 
+
 ## Watson Congitive API
 text_to_speech = TextToSpeechV1(
     username='YOUR_WATSON_USERNAME',
