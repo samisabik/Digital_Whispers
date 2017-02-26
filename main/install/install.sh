@@ -36,24 +36,13 @@ cd python-sdk
 sudo python setup.py install
 cd ..
 
-echo "Setting up WIFI and USB Soundcard"
+echo "Setting up WIFI"
 echo "========================="
-sudo mv asound.conf /etc/asound.conf
 mv wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 echo "Clean up"
 echo "========================="
 sudo rm -r python-sdk portaudio pa_stable_v190600_20161030.tgz
-
-echo "Setting new hostname..."
-echo "=========================="
-hostn=$(cat /etc/hostname)
-echo "hostname is: $hostn"
-echo "enter new hostname: "
-read newhost
-sed -i "s/$hostn/$newhost/g" /etc/hosts
-sed -i "s/$hostn/$newhost/g" /etc/hostname
-echo "new hostname: $newhost"
 
 echo "Reset pre-owned user"
 chown -R pi: /home/pi/Digital_Whispers
