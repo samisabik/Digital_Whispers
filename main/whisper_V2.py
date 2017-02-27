@@ -46,12 +46,10 @@ audio_int()
 
 while True:
 	listen_for_speech()
-
 	with open(join(dirname(__file__), 'record.wav'), 'rb') as audio_file:
-    	result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
-    	parsed_json = json.loads(result)
-    	text = parsed_json['results'][0]['alternatives'][0]['transcript']
-
+		result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
+		parsed_json = json.loads(result)
+		text = parsed_json['results'][0]['alternatives'][0]['transcript']
 	print text
 	text_file.write(text)
 	text_file.close()
