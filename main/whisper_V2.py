@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import json
+import utils
 from utils import *
 from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
