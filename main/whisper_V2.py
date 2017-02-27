@@ -17,15 +17,6 @@ speech_to_text = SpeechToTextV1(
     username='YOUR_WATSON_USERNAME',
     password='YOUR_WATSON_PASSWORD')
 
-## Microphone stream config.
-CHUNK = 4096 
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 44100
-THRESHOLD = audio_int() + 300  
-SILENCE_LIMIT = 2 
-PREV_AUDIO = 0.5  
-
 ## SETUP + TOOLS
 audio_int()
 rec = utils.Recorder(channels=1)
