@@ -1,5 +1,14 @@
 import pyaudio, wave
 
+## Microphone stream config.
+CHUNK = 4096 
+FORMAT = pyaudio.paInt16
+CHANNELS = 1
+RATE = 44100
+THRESHOLD = 1300  
+SILENCE_LIMIT = 2 
+PREV_AUDIO = 0.5  
+
 def audio_int(num_samples=50):
 
     print "Getting intensity values from mic."
