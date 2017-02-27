@@ -14,9 +14,8 @@ speech_to_text = SpeechToTextV1(
     username='YOUR_WATSON_USERNAME',
     password='YOUR_WATSON_PASSWORD')
 
-## SETUP + TOOLS
 audio_int()
-rec = utils.Recorder(channels=1)
+##rec = utils.Recorder(channels=1)
 listen_for_speech()
 with open(join(dirname(__file__), 'record.wav'), 'rb') as audio_file:
     result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
