@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import json, os, sys, time, random, utils
+import json, os, sys, time, random
+from utils import *
 from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
 import audioop
