@@ -1,4 +1,16 @@
-import socket,time,os,datetime,sys
+import socket,time,os,datetime,sys,random
+from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
+
+## IBM Watson API
+text_to_speech = TextToSpeechV1(
+    username='YOUR_WATSON_USERNAME',
+    password='YOUR_WATSON_PASSWORD')
+
+speech_to_text = SpeechToTextV1(
+    username='YOUR_WATSON_USERNAME',
+    password='YOUR_WATSON_PASSWORD')
+
+TTSvoices = ["en-US_AllisonVoice","en-US_LisaVoice","en-GB_KateVoice","en-US_MichaelVoice"]
 
 UDP_HOST = ""
 UDP_PORT = 2222
@@ -28,6 +40,15 @@ while True:
 	data, addr = s.recvfrom(1024)
 
 	print data
+
+	## TEXT TO SPEECH API CALL
+        with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file:
+            
+            startTTS = time.time()
+            audio_file.write(text_to_speech.synthesize(data,TTSvoices[random.randrange(0, 4)],"audio/wav"))
+            endTTS = time.time()
+    os.system('play -q --ignore-length output/synthesize.wav')
+
 
 	# if (data == "start_L"):
 	# 	ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
