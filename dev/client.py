@@ -1,4 +1,5 @@
 import socket,time,os,datetime,sys,random
+from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
 
 ## IBM Watson API
