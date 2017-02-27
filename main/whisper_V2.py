@@ -14,7 +14,6 @@ speech_to_text = SpeechToTextV1(
     username='YOUR_WATSON_USERNAME',
     password='YOUR_WATSON_PASSWORD')
 
-text_file = open("whispers.txt", "w")
 
 ## Whisper Server config
 UDP_HOST = ''
@@ -51,6 +50,7 @@ while True:
 		parsed_json = json.loads(result)
 		text = parsed_json['results'][0]['alternatives'][0]['transcript']
 	print text
+	text_file = open("whispers.txt", "w")
 	text_file.write(text)
 	text_file.close()
 	s.sendto(text, (client[0],UDP_PORT))
