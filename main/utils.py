@@ -1,4 +1,6 @@
-import pyaudio, wave
+import pyaudio, wave, math
+from collections import deque
+import audioop
 
 ## Microphone stream config.
 CHUNK = 4096 

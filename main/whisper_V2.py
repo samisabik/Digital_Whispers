@@ -1,13 +1,8 @@
 #!/usr/bin/env python
-import json, os, sys, time, random
+import json
 from utils import *
 from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
-import audioop
-from collections import deque
-import math
-import pyaudio, wave
-import RPi.GPIO as GPIO
 
 ## Watson Congitive API
 text_to_speech = TextToSpeechV1(
