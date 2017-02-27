@@ -4,11 +4,10 @@ from termcolor import colored
 
 
 UDP_HOST = ''
-UDP_PORT = int(raw_input('Enter UDP_PORT: '))
-NUM_CLIENT = int(raw_input('Enter NUM_CLIENT: '))
+UDP_PORT = 2222
+NUM_CLIENT = 7
 MAX_LOOP = int(raw_input('Enter MAX_LOOP: '))
 client = [None] * NUM_CLIENT
-
 
 try :
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
