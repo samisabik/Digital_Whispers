@@ -14,6 +14,8 @@ speech_to_text = SpeechToTextV1(
     username='a1c7a39e-6618-4274-98f1-6ec5ef7237b8',
     password='pU5vkvlPIpmZ')
 
+text_file = open("whispers.txt", "w")
+
 ## Whisper Server config
 UDP_HOST = ''
 UDP_PORT = 2222
@@ -41,13 +43,16 @@ print colored('\t_________________________','magenta',attrs=['bold'])
 print ""
 
 audio_int()
-listen_for_speech()
 
-with open(join(dirname(__file__), 'record.wav'), 'rb') as audio_file:
-    result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
-    parsed_json = json.loads(result)
-    text = parsed_json['results'][0]['alternatives'][0]['transcript']
+while True:
+	listen_for_speech()
 
-print text
+	with open(join(dirname(__file__), 'record.wav'), 'rb') as audio_file:
+    	result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
+    	parsed_json = json.loads(result)
+    	text = parsed_json['results'][0]['alternatives'][0]['transcript']
 
-s.sendto(text, (client[0],UDP_PORT))
+	print text
+	text_file.write(text)
+	text_file.close()
+	s.sendto(text, (client[0],UDP_PORT))
