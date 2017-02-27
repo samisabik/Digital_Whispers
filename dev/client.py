@@ -42,11 +42,8 @@ while True:
 	print data
 
 	## TEXT TO SPEECH API CALL
-        with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file:
-            
-            startTTS = time.time()
-            audio_file.write(text_to_speech.synthesize(data,TTSvoices[random.randrange(0, 4)],"audio/wav"))
-            endTTS = time.time()
+    with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file: 
+    	audio_file.write(text_to_speech.synthesize(data,TTSvoices[random.randrange(0, 4)],"audio/wav"))
     os.system('play -q --ignore-length output/synthesize.wav')
 
 
