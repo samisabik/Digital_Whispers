@@ -27,21 +27,23 @@ while True:
 
 	data, addr = s.recvfrom(1024)
 
-	if (data == "start_L"):
-		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
-		print ts + "START LISTEN"
+	print data
+
+	# if (data == "start_L"):
+	# 	ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
+	# 	print ts + "START LISTEN"
 	
-	if (data == "stop_L"):
-		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
-		print ts + "STOP LISTEN"		
-		time.sleep(5)
-		s.sendto('start_T', (SERVER_IP,UDP_PORT))
-		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
-		print ts + "START TALK"
-		time.sleep(5)
-		s.sendto('stop_T', (SERVER_IP,UDP_PORT))
-		ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
-		print ts + "STOP TALK"
+	# if (data == "stop_L"):
+	# 	ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
+	# 	print ts + "STOP LISTEN"		
+	# 	time.sleep(5)
+	# 	s.sendto('start_T', (SERVER_IP,UDP_PORT))
+	# 	ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
+	# 	print ts + "START TALK"
+	# 	time.sleep(5)
+	# 	s.sendto('stop_T', (SERVER_IP,UDP_PORT))
+	# 	ts = datetime.datetime.fromtimestamp(time.time()).strftime('[%H:%M:%S] ')
+	# 	print ts + "STOP TALK"
 
 
 
