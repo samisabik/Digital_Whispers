@@ -51,5 +51,5 @@ while True:
 		text = parsed_json['results'][0]['alternatives'][0]['transcript']
 	print text
 	with open("test.txt", "a") as myfile:
-		myfile.write(text)
+		myfile.write(text +'\n')
 	s.sendto(text, (client[0],UDP_PORT))
