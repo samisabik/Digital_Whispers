@@ -13,7 +13,7 @@ fi
 echo "Installing dependencies..."
 echo "=========================="
 sudo apt-get update && sudo apt-get -y upgrade
-sudo apt-get install -y python-all-dev python-setuptools portaudio19-dev sox libsox-fmt-all libasound-dev
+sudo apt-get install -y python-all-dev python-setuptools portaudio19-dev sox libsox-fmt-all libasound-dev libzmq3-dev
 sudo easy_install pip
 
 echo "Installing PyAudio"
@@ -35,6 +35,10 @@ git clone https://github.com/watson-developer-cloud/python-sdk.git
 cd python-sdk
 sudo python setup.py install
 cd ..
+
+echo "Installing ZeroMQ"
+echo "========================="
+sudo pip install pyzmq
 
 echo "Setting up WIFI"
 echo "========================="
