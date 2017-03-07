@@ -44,18 +44,18 @@ class Client:
 		self.cmdsock = cmdsock
 
 	def send(self, cmd, msg=""):
-		print self.addr, "sending", cmd, msg
+		print self.addr, "->", cmd, msg
 		self.cmdsock.send_string(cmd + ":" + msg)
 		response = self.cmdsock.recv()
-		print self.addr, "received cmd", response
+		print self.addr, "<-", response
 		return response
 
 	def expect(self, expectedstate, timeout=100):
-		print self.addr, "expecting", expectedstate
+		print self.addr, "should be", expectedstate, "..."
 		self.statesock.RCVTIMEO = timeout
 		[state, data] = self.statesock.recv().split(':')
 		if state != expectedstate:
-			raise UnexpectedStateError("unexpected state", state)
+			raise UnexpectedStateError("unexpected state " + state)
 
 		return data
 
@@ -64,6 +64,7 @@ clients = [Client('whisper_'+str(x)) for x in range(0,NUM_CLIENTS)]
 # audio_int()
 
 while True:
+	print "=== whisper_master ==="
 	listen_for_speech()
 	with open('output/record.wav', 'rb') as audio_file:
 		result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
@@ -75,37 +76,49 @@ while True:
 		continue
 	# text = "Brian is in the kitchen"
 
+	print "-"
+
 	for i, client in enumerate(clients):
 		if i+1 < len(clients):
 			nextclient = clients[i+1]
 		else:
 			nextclient = None
 
+		print "===", client.addr, "==="
+
 		try:
 			if nextclient:
+				print "[Phase 1: Listen]"
 				nextclient.send("LISTEN")
 				nextclient.expect("listening")
-		except (zmq.ZMQError, UnexpectedStateError):
-			print "Nextclient " + nextclient.addr + "failed"
+		except (zmq.ZMQError, UnexpectedStateError) as e:
+			print nextclient.addr, "failed:", e
 			nextclient = None
 
 		try:
 			# print "sending", text
+			print "[Phase 2: Talk]"
 			client.send("TALK", text)
 			client.expect("talking")
 			client.expect("waiting", 10*1000)
-		except (zmq.ZMQError, UnexpectedStateError):
-			print "Client " + client.addr + "failed"
+		except (zmq.ZMQError, UnexpectedStateError) as e:
+			print client.addr, "failed:", e
 
 		try:
 			if nextclient:
+				print "[Phase 3: TTS]"
 				nextclient.send("STOP_LISTEN")
 
 				clienttext = nextclient.expect("waiting", 10*1000)
 				if clienttext:
-					print "Updating text from client", clienttext
+					print '"', clienttext, '"'
 					text = clienttext
-		except (zmq.ZMQError, UnexpectedStateError):
-			print "Nextclient " + nextclient.addr + "failed"
+				else:
+					print "(no text)"
+		except (zmq.ZMQError, UnexpectedStateError) as e:
+			print nextclient.addr, "failed: e"
+
+		print "-"
+	print "-"
 # sleep(10)
 
