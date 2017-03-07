@@ -45,6 +45,7 @@ def error():
 def expect(expectedstate):
 	if (state == expectedstate):
 		ok()
+		sleep(0.1) # State messages seem to go missing sometimes without the delay
 	else:
 		print("Expected state", expectedstate, "not", state)
 		error()
@@ -83,9 +84,7 @@ while True:
 	elif cmd == "TALK":
 		expect("waiting")
 
-		sleep(0.1)
 		changestate("talking")
-		sleep(0.1)
 		with open('output/synthesize.wav', 'wb') as audio_file:
 			audio_file.write(text_to_speech.synthesize(data,voice,"audio/wav"))
 		os.system('play -q --ignore-length output/synthesize.wav')
