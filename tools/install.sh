@@ -51,6 +51,9 @@ sudo rm -r python-sdk portaudio pa_stable_v190600_20161030.tgz
 echo "Reset pre-owned user"
 chown -R pi: /home/pi/Digital_Whispers
 
+echo "Installing service files"
+cp *.service /etc/systemd/system
+
 echo "Reboot !"
 echo "=========================="
 reboot
