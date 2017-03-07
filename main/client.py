@@ -22,7 +22,7 @@ statesock.bind("tcp://*:5560")
 cmdsock = context.socket(zmq.REP)
 cmdsock.bind("tcp://*:5561")
 
-state = "wait"
+state = "waiting"
 
 def changestate(newstate, data=""):
 	state = newstate
@@ -32,7 +32,7 @@ def changestate(newstate, data=""):
 def ok():
 	cmdsock.send_string("OK")
 
-changestate("... waiting")
+changestate("waiting")
 
 rec = utils.Recorder(channels=1)
 
@@ -41,13 +41,13 @@ while True:
 	[cmd, data] = cmdsock.recv().split(':')
 	print "received", cmd, data
 
-	if cmd == "... listening":
+	if cmd == "LISTEN":
 		ok()
 		recfile2 = rec.open('output/record.wav', 'wb')
 		recfile2.start_recording()
 		changestate("listening")
 
-	elif cmd == "... stop listening":
+	elif cmd == "STOP_LISTEN":
 		recfile2.stop_recording()
 		recfile2.close()
 		ok()
@@ -61,7 +61,7 @@ while True:
 			text = ""
 		changestate("waiting", text)
 
-	elif cmd == "... talking":
+	elif cmd == "TALK":
 		ok()
 		changestate("talking")
 		with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file: 
@@ -70,6 +70,6 @@ while True:
 		changestate("waiting")
 
 	else:
-		cmdsock.send_string("ERROR !")
+		cmdsock.send_string("ERROR")
 		exit()
 
