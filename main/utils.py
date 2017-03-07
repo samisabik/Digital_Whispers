@@ -86,7 +86,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=1):
 def save_speech(data, p):
 
     data = ''.join(data)
-    wf = wave.open('record.wav', 'wb')
+    wf = wave.open('output/record.wav', 'wb')
     wf.setnchannels(1)
     wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
     wf.setframerate(44100) 
