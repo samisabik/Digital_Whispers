@@ -44,6 +44,13 @@ echo "Setting up WIFI"
 echo "========================="
 cp wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
+echo "Setting up ALSA"
+echo "========================="
+cp alsa.conf /usr/share/alsa/alsa.conf
+sh -c 'echo "disable_audio_dither=1" >> /boot/config.txt'
+amixer -c0 set PCM 100%
+amixer -c1 set Mic 100%
+
 echo "Setting new hostname..."
 echo "=========================="
 hostn=`cat /etc/hostname`
