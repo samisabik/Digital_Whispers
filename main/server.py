@@ -65,7 +65,7 @@ clients = [Client('whisper_'+str(x)) for x in range(0,NUM_CLIENTS)]
 
 while True:
 	listen_for_speech()
-	with open(join(dirname(__file__), 'output/record.wav'), 'rb') as audio_file:
+	with open('output/record.wav', 'rb') as audio_file:
 		result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
 		parsed_json = json.loads(result)
 	try:
