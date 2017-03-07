@@ -6,8 +6,8 @@ set -e
 
 # Make sure script is run as root.
 if [ "$(id -u)" != "0" ]; then
-  echo "Must be run as root with sudo! Try: sudo ./install.sh"
-  exit 1
+	echo "Must be run as root with sudo! Try: sudo ./install.sh"
+	exit 1
 fi
 
 echo "Installing dependencies..."
@@ -42,7 +42,33 @@ sudo pip install pyzmq
 
 echo "Setting up WIFI"
 echo "========================="
-mv wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+cp wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+
+echo "Setting new hostname..."
+echo "=========================="
+hostn=`cat /etc/hostname`
+echo "Current hostname is: $hostn"
+echo "Enter new hostname (enter to leave the same): "
+read newhost
+if [ "$newhost" ]; then
+	sed -i "s/$hostn/$newhost/g" /etc/hosts
+	sed -i "s/$hostn/$newhost/g" /etc/hostname
+	echo "New hostname: $newhost"
+else
+	echo "Hostname not changed"
+fi
+
+echo "Installing service files"
+echo "========================="
+cp *.service /etc/systemd/system
+
+if [ "$HOSTNAME" = "whisper_master" ]; then
+	echo "Setting up whisper_server service"
+	systemctl enable whisper_server
+else
+	echo "Setting up whisper_client service"
+	systemctl enable whisper_client
+fi
 
 echo "Clean up"
 echo "========================="
@@ -50,9 +76,6 @@ sudo rm -r python-sdk portaudio pa_stable_v190600_20161030.tgz
 
 echo "Reset pre-owned user"
 chown -R pi: /home/pi/Digital_Whispers
-
-echo "Installing service files"
-cp *.service /etc/systemd/system
 
 echo "Reboot !"
 echo "=========================="
