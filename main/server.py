@@ -12,6 +12,9 @@ context = zmq.Context()
 class UnexpectedStateError(Exception):
 	pass
 
+class FailedRequestError(Exception):
+	pass
+
 ## IBM Watson API
 text_to_speech = TextToSpeechV1(
 	username='96db6c7a-2595-491a-9a62-740dc31e0482',
@@ -31,17 +34,17 @@ class Client:
 
 	def connect(self):
 		statesock = context.socket(zmq.SUB)
+		statesock.setsockopt(zmq.LINGER, 0)
 		statesock.connect("tcp://"+self.addr+":5560")
 		statesock.setsockopt(zmq.SUBSCRIBE,'')
-		statesock.setsockopt(zmq.LINGER, 0)
-		statesock.SNDTIMEO = 1000
+		statesock.SNDTIMEO = 2000
 		self.statesock = statesock
 
 		cmdsock = context.socket(zmq.REQ)
-		cmdsock.connect("tcp://"+self.addr+":5561")
 		cmdsock.setsockopt(zmq.LINGER, 0)
-		cmdsock.SNDTIMEO = 1000
-		cmdsock.RCVTIMEO = 1000
+		cmdsock.connect("tcp://"+self.addr+":5561")
+		cmdsock.SNDTIMEO = 2000
+		cmdsock.RCVTIMEO = 2000
 		self.cmdsock = cmdsock
 
 	def reset(self):
@@ -50,7 +53,9 @@ class Client:
 		except zmq.ZMQError:
 			pass
 
+		self.cmdsock.disconnect("tcp://"+self.addr+":5561")
 		self.cmdsock.close()
+		self.statesock.disconnect("tcp://"+self.addr+":5560")
 		self.statesock.close()
 		self.connect()
 
@@ -59,9 +64,12 @@ class Client:
 		self.cmdsock.send_string(cmd + ":" + msg)
 		response = self.cmdsock.recv()
 		print self.addr, "<-", response
+		if response == "ERROR":
+			raise FailedRequestError("client returned ERROR")
+
 		return response
 
-	def expect(self, expectedstate, timeout=1000):
+	def expect(self, expectedstate, timeout=2000):
 		print self.addr, "[" + expectedstate + "]"
 		self.statesock.RCVTIMEO = timeout
 		[state, data] = self.statesock.recv().split(':')
@@ -108,7 +116,7 @@ while True:
 				print "Listen:"
 				nextclient.send("LISTEN")
 				nextclient.expect("listening")
-		except (zmq.ZMQError, UnexpectedStateError) as e:
+		except (zmq.ZMQError, UnexpectedStateError, FailedRequestError) as e:
 			print nextclient.addr, "failed:", e
 			nextclient.reset()
 			nextclient = None
@@ -119,7 +127,7 @@ while True:
 			client.send("TALK", text)
 			client.expect("talking")
 			client.expect("waiting", 20*1000)
-		except (zmq.ZMQError, UnexpectedStateError) as e:
+		except (zmq.ZMQError, UnexpectedStateError, FailedRequestError) as e:
 			print client.addr, "failed:", e
 			client.reset()
 
@@ -135,7 +143,7 @@ while True:
 					text = clienttext
 				else:
 					print "TTS result: (no text)"
-		except (zmq.ZMQError, UnexpectedStateError) as e:
+		except (zmq.ZMQError, UnexpectedStateError, FailedRequestError) as e:
 			print nextclient.addr, "failed:", e
 			nextclient.reset()
 

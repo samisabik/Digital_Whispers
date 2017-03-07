@@ -18,12 +18,14 @@ voice = TTSvoices[random.randrange(0, 4)]
 
 context = zmq.Context()
 statesock = context.socket(zmq.PUB)
-statesock.bind("tcp://*:5560")
 statesock.setsockopt(zmq.LINGER, 0)
+# statesock.setsockopt(zmq.CONFLATE, 1)
+statesock.bind("tcp://*:5560")
+
 
 cmdsock = context.socket(zmq.REP)
-cmdsock.bind("tcp://*:5561")
 cmdsock.setsockopt(zmq.LINGER, 0)
+cmdsock.bind("tcp://*:5561")
 
 state = "waiting"
 
@@ -48,6 +50,8 @@ def expect(expectedstate):
 		error()
 
 rec = utils.Recorder(channels=1)
+
+changestate("waiting")
 
 recfile = None
 while True:
@@ -79,7 +83,9 @@ while True:
 	elif cmd == "TALK":
 		expect("waiting")
 
+		sleep(0.1)
 		changestate("talking")
+		sleep(0.1)
 		with open('output/synthesize.wav', 'wb') as audio_file:
 			audio_file.write(text_to_speech.synthesize(data,voice,"audio/wav"))
 		os.system('play -q --ignore-length output/synthesize.wav')
