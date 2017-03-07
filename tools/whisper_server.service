@@ -3,7 +3,7 @@ Description=Digital Whispers Server
 
 [Service]
 WorkingDirectory=/home/pi/Digital_Whispers
-ExecStart=/usr/bin/python main/server.py
+ExecStart=/usr/bin/python -u main/server.py
 User=pi
 Restart=always
 
