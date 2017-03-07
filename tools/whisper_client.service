@@ -1,0 +1,11 @@
+[Unit]
+Description=Digital Whispers Client
+
+[Service]
+WorkingDirectory=/home/pi/Digital_Whispers
+ExecStart=/usr/bin/python main/client.py
+User=pi
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
