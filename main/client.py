@@ -14,6 +14,7 @@ speech_to_text = SpeechToTextV1(
 	password='pU5vkvlPIpmZ')
 
 TTSvoices = ["en-US_AllisonVoice","en-US_LisaVoice","en-GB_KateVoice","en-US_MichaelVoice"]
+voice = TTSvoices[random.randrange(0, 4)]
 
 context = zmq.Context()
 statesock = context.socket(zmq.PUB)
@@ -27,6 +28,7 @@ cmdsock.setsockopt(zmq.LINGER, 0)
 state = "waiting"
 
 def changestate(newstate, data=""):
+	global state
 	state = newstate
 	statesock.send_string(state + ":" + data)
 	print "state", state
@@ -36,8 +38,14 @@ def ok():
 
 def error():
 	cmdsock.send_string("ERROR")
+	exit()
 
-changestate("waiting")
+def expect(expectedstate):
+	if (state == expectedstate):
+		ok()
+	else:
+		print("Expected state", expectedstate, "not", state)
+		error()
 
 rec = utils.Recorder(channels=1)
 
@@ -47,15 +55,17 @@ while True:
 	print "received", cmd, data
 
 	if cmd == "LISTEN":
-		ok()
+		expect("waiting")
+
 		recfile2 = rec.open('output/record.wav', 'wb')
 		recfile2.start_recording()
 		changestate("listening")
 
 	elif cmd == "STOP_LISTEN":
+		expect("listening")
+
 		recfile2.stop_recording()
 		recfile2.close()
-		ok()
 		with open('output/record.wav', 'rb') as audio_file:
 			result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
 			parsed_json = json.loads(result)
@@ -67,12 +77,17 @@ while True:
 		changestate("waiting", text)
 
 	elif cmd == "TALK":
-		ok()
+		expect("waiting")
+
 		changestate("talking")
 		with open('output/synthesize.wav', 'wb') as audio_file:
-			audio_file.write(text_to_speech.synthesize(data,TTSvoices[random.randrange(0, 4)],"audio/wav"))
+			audio_file.write(text_to_speech.synthesize(data,voice,"audio/wav"))
 		os.system('play -q --ignore-length output/synthesize.wav')
 		changestate("waiting")
+
+	elif cmd == "DIE":
+		ok()
+		exit()
 
 	else:
 		error()
