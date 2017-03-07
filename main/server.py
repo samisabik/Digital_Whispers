@@ -10,7 +10,6 @@ from time import sleep
 context = zmq.Context()
 
 class UnexpectedStateError(Exception):
-	"""Base class for exceptions in this module."""
 	pass
 
 ## IBM Watson API
@@ -28,20 +27,32 @@ class Client:
 	def __init__(self, addr):
 
 		self.addr = addr
+		self.connect()
 
+	def connect(self):
 		statesock = context.socket(zmq.SUB)
-		statesock.connect("tcp://"+addr+":5560")
+		statesock.connect("tcp://"+self.addr+":5560")
 		statesock.setsockopt(zmq.SUBSCRIBE,'')
 		statesock.setsockopt(zmq.LINGER, 0)
-		statesock.SNDTIMEO = 100
+		statesock.SNDTIMEO = 200
 		self.statesock = statesock
 
 		cmdsock = context.socket(zmq.REQ)
-		cmdsock.connect("tcp://"+addr+":5561")
+		cmdsock.connect("tcp://"+self.addr+":5561")
 		cmdsock.setsockopt(zmq.LINGER, 0)
-		cmdsock.SNDTIMEO = 100
-		cmdsock.RCVTIMEO = 100
+		cmdsock.SNDTIMEO = 200
+		cmdsock.RCVTIMEO = 200
 		self.cmdsock = cmdsock
+
+	def reset(self):
+		try:
+			self.send("DIE")
+		except zmq.ZMQError:
+			pass
+
+		self.cmdsock.close()
+		self.statesock.close()
+		self.connect()
 
 	def send(self, cmd, msg=""):
 		print self.addr, "->", cmd, msg
@@ -51,7 +62,7 @@ class Client:
 		return response
 
 	def expect(self, expectedstate, timeout=100):
-		print self.addr, "should be", expectedstate, "..."
+		print self.addr, "[" + expectedstate + "]"
 		self.statesock.RCVTIMEO = timeout
 		[state, data] = self.statesock.recv().split(':')
 		if state != expectedstate:
@@ -63,7 +74,10 @@ clients = [Client('whisper_'+str(x)) for x in range(0,NUM_CLIENTS)]
 
 # audio_int()
 
+loopno = 0
+
 while True:
+	loopno = loopno + 1
 	print "=== whisper_master ==="
 	listen_for_speech()
 	with open('output/record.wav', 'rb') as audio_file:
@@ -74,7 +88,7 @@ while True:
 	except:
 		print "Speech-to-text failed"
 		continue
-	# text = "Brian is in the kitchen"
+	# text = "This is loop number " + str(loopno)
 
 	print "-"
 
@@ -88,35 +102,38 @@ while True:
 
 		try:
 			if nextclient:
-				print "[Phase 1: Listen]"
+				print "Listen:"
 				nextclient.send("LISTEN")
 				nextclient.expect("listening")
 		except (zmq.ZMQError, UnexpectedStateError) as e:
 			print nextclient.addr, "failed:", e
+			nextclient.reset()
 			nextclient = None
 
 		try:
 			# print "sending", text
-			print "[Phase 2: Talk]"
+			print "Talk:"
 			client.send("TALK", text)
 			client.expect("talking")
 			client.expect("waiting", 10*1000)
 		except (zmq.ZMQError, UnexpectedStateError) as e:
 			print client.addr, "failed:", e
+			client.reset()
 
 		try:
 			if nextclient:
-				print "[Phase 3: TTS]"
+				print "TTS:"
 				nextclient.send("STOP_LISTEN")
 
 				clienttext = nextclient.expect("waiting", 10*1000)
 				if clienttext:
-					print '"', clienttext, '"'
+					print "TTS result:", '"' + clienttext + '"'
 					text = clienttext
 				else:
-					print "(no text)"
+					print "TTS result: (no text)"
 		except (zmq.ZMQError, UnexpectedStateError) as e:
-			print nextclient.addr, "failed: e"
+			print nextclient.addr, "failed:", e
+			nextclient.reset()
 
 		print "-"
 	print "-"
