@@ -51,7 +51,7 @@ while True:
 		recfile2.stop_recording()
 		recfile2.close()
 		ok()
-		with open(join(dirname(__file__), 'output/record.wav'), 'rb') as audio_file:
+		with open('output/record.wav', 'rb') as audio_file:
 			result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
 			parsed_json = json.loads(result)
 		try:
@@ -64,7 +64,7 @@ while True:
 	elif cmd == "TALK":
 		ok()
 		changestate("talking")
-		with open(join(dirname(__file__), 'output/synthesize.wav'), 'wb') as audio_file: 
+		with open('output/synthesize.wav', 'wb') as audio_file:
 			audio_file.write(text_to_speech.synthesize(data,TTSvoices[random.randrange(0, 4)],"audio/wav"))
 		os.system('play -q --ignore-length output/synthesize.wav')
 		changestate("waiting")
