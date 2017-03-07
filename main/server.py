@@ -34,14 +34,14 @@ class Client:
 		statesock.connect("tcp://"+self.addr+":5560")
 		statesock.setsockopt(zmq.SUBSCRIBE,'')
 		statesock.setsockopt(zmq.LINGER, 0)
-		statesock.SNDTIMEO = 200
+		statesock.SNDTIMEO = 1000
 		self.statesock = statesock
 
 		cmdsock = context.socket(zmq.REQ)
 		cmdsock.connect("tcp://"+self.addr+":5561")
 		cmdsock.setsockopt(zmq.LINGER, 0)
-		cmdsock.SNDTIMEO = 200
-		cmdsock.RCVTIMEO = 200
+		cmdsock.SNDTIMEO = 1000
+		cmdsock.RCVTIMEO = 1000
 		self.cmdsock = cmdsock
 
 	def reset(self):
@@ -61,7 +61,7 @@ class Client:
 		print self.addr, "<-", response
 		return response
 
-	def expect(self, expectedstate, timeout=100):
+	def expect(self, expectedstate, timeout=1000):
 		print self.addr, "[" + expectedstate + "]"
 		self.statesock.RCVTIMEO = timeout
 		[state, data] = self.statesock.recv().split(':')
@@ -90,6 +90,9 @@ while True:
 		continue
 	# text = "This is loop number " + str(loopno)
 
+	with open('output/text.txt', 'a') as text_file:
+		text_file.write(text + '\n')
+
 	print "-"
 
 	for i, client in enumerate(clients):
@@ -115,17 +118,18 @@ while True:
 			print "Talk:"
 			client.send("TALK", text)
 			client.expect("talking")
-			client.expect("waiting", 10*1000)
+			client.expect("waiting", 20*1000)
 		except (zmq.ZMQError, UnexpectedStateError) as e:
 			print client.addr, "failed:", e
 			client.reset()
 
+		sleep(1)
 		try:
 			if nextclient:
 				print "TTS:"
 				nextclient.send("STOP_LISTEN")
 
-				clienttext = nextclient.expect("waiting", 10*1000)
+				clienttext = nextclient.expect("waiting", 20*1000)
 				if clienttext:
 					print "TTS result:", '"' + clienttext + '"'
 					text = clienttext
@@ -136,6 +140,9 @@ while True:
 			nextclient.reset()
 
 		print "-"
+
+	with open('output/text.txt', 'a') as text_file:
+		text_file.write(text + '\n\n')
 	print "-"
 # sleep(10)
 
