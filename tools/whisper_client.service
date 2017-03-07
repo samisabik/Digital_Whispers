@@ -8,7 +8,7 @@ WorkingDirectory=/home/pi/Digital_Whispers
 ExecStart=/usr/bin/python -u main/client.py
 User=pi
 Restart=always
-RestartSec=1
+RestartSec=2
 
 [Install]
 WantedBy=multi-user.target

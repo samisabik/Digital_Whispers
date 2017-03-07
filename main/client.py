@@ -18,9 +18,11 @@ TTSvoices = ["en-US_AllisonVoice","en-US_LisaVoice","en-GB_KateVoice","en-US_Mic
 context = zmq.Context()
 statesock = context.socket(zmq.PUB)
 statesock.bind("tcp://*:5560")
+statesock.setsockopt(zmq.LINGER, 0)
 
 cmdsock = context.socket(zmq.REP)
 cmdsock.bind("tcp://*:5561")
+cmdsock.setsockopt(zmq.LINGER, 0)
 
 state = "waiting"
 
@@ -31,6 +33,9 @@ def changestate(newstate, data=""):
 
 def ok():
 	cmdsock.send_string("OK")
+
+def error():
+	cmdsock.send_string("ERROR")
 
 changestate("waiting")
 
@@ -70,6 +75,6 @@ while True:
 		changestate("waiting")
 
 	else:
-		cmdsock.send_string("ERROR")
+		error()
 		exit()
 
