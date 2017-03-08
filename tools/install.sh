@@ -49,8 +49,8 @@ echo "========================="
 cp alsa.conf /usr/share/alsa/alsa.conf
 sh -c 'echo "disable_audio_dither=1" >> /boot/config.txt'
 sh -c 'echo "audio_pwm_mode=2" >> /boot/config.txt'
-amixer -c0 set PCM 100%
-amixer -c1 set Mic 100%
+amixer -c0 set PCM 100% || :
+amixer -c1 set Mic 100% || :
 
 echo "Setting new hostname..."
 echo "=========================="
