@@ -8,6 +8,7 @@ import zmq
 from time import sleep
 
 context = zmq.Context()
+level = 200
 
 class UnexpectedStateError(Exception):
 	pass
@@ -80,14 +81,11 @@ class Client:
 
 clients = [Client('whisper_'+str(x)) for x in range(0,NUM_CLIENTS)]
 
-# audio_int()
-
-loopno = 0
+threshold = audio_int(50) + level
 
 while True:
-	loopno = loopno + 1
 	print "=== whisper_master ==="
-	listen_for_speech()
+	listen_for_speech(threshold,1)
 	with open('output/record.wav', 'rb') as audio_file:
 		result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
 		parsed_json = json.loads(result)
@@ -96,7 +94,6 @@ while True:
 	except:
 		print "Speech-to-text failed"
 		continue
-	# text = "This is loop number " + str(loopno)
 
 	with open('output/text.txt', 'a') as text_file:
 		text_file.write(text + '\n')
