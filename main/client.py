@@ -1,4 +1,5 @@
-import os,sys,random,utils,json,zmq
+import os,sys,random,json,zmq
+from utils import *
 from os.path import join, dirname
 from sys import exit
 from time import sleep

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import socket, sys, time, datetime, os, json, utils
-from termcolor import colored
 from utils import *
 from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
