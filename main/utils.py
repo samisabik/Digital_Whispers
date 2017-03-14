@@ -67,7 +67,7 @@ class Client:
 
 def audio_int(num_samples=50):
 
-    print "- measuring noise floor..."
+    print "# measuring noise floor..."
     p = pyaudio.PyAudio()
     stream = p.open(
         format=FORMAT,
@@ -79,7 +79,7 @@ def audio_int(num_samples=50):
     for x in range(num_samples)] 
     values = sorted(values, reverse=True)
     r = sum(values[:int(num_samples * 0.2)]) / int(num_samples * 0.2)
-    print "- average noise floor = " + "%.2f" % r
+    print "# average noise floor = " + "%.2f" % r
     stream.close()
     p.terminate()
     return r
@@ -94,7 +94,7 @@ def listen_for_speech(threshold, num_phrases=1):
                     input=True,
                     frames_per_buffer=CHUNK)
 
-    print "- listening..."
+    print "# listening..."
     audio2send = []
     cur_data = ''
     rel = RATE/CHUNK
@@ -109,7 +109,7 @@ def listen_for_speech(threshold, num_phrases=1):
         slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4))))
         if(sum([x > threshold for x in slid_win]) > 0):
             if(not started):
-                print "- starting recording user"
+                print "# starting recording user"
                 started = True
             audio2send.append(cur_data)
         elif (started is True):
@@ -119,11 +119,10 @@ def listen_for_speech(threshold, num_phrases=1):
             prev_audio = deque(maxlen=0.5 * rel) 
             audio2send = []
             n -= 1
-            print "- listening..."
         else:
             prev_audio.append(cur_data)
 
-    print "- done recording"
+    print "# done recording"
     stream.close()
     p.terminate()
 
