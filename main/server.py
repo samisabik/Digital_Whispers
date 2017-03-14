@@ -65,7 +65,7 @@ while True:
 			print nextclient.addr, "failed:", e
 			nextclient.reset()
 			nextclient = None
-		GPIO.output(client+2, 1)
+		GPIO.output(i+2, 1)
 		time.sleep(1)
 		try:
 			print "Talk:"
@@ -75,9 +75,9 @@ while True:
 		except (zmq.ZMQError, UnexpectedStateError, FailedRequestError) as e:
 			print client.addr, "failed:", e
 			client.reset()
-			GPIO.output(client+2, 0)
+			GPIO.output(i+2, 0)
 		time.sleep(1) ## addin extra time to add some fucking up
-		GPIO.output(client+2, 0)
+		GPIO.output(i+2, 0)
 		try:
 			if nextclient:
 				print "TTS:"
