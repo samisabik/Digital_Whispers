@@ -2,38 +2,87 @@ import pyaudio, wave, math
 from collections import deque
 import audioop
 
-## Microphone stream config.
 CHUNK = 4096 
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
-THRESHOLD = 1300  
-SILENCE_LIMIT = 2 
-PREV_AUDIO = 0.5  
+SILENCE_LIMIT = 3 
+PREV_AUDIO = 1  
+
+class Client:
+    def __init__(self, addr):
+
+        self.addr = addr
+        self.connect()
+
+    def connect(self):
+        statesock = context.socket(zmq.SUB)
+        statesock.setsockopt(zmq.LINGER, 0)
+        statesock.connect("tcp://"+self.addr+":5560")
+        statesock.setsockopt(zmq.SUBSCRIBE,'')
+        statesock.SNDTIMEO = 2000
+        self.statesock = statesock
+
+        cmdsock = context.socket(zmq.REQ)
+        cmdsock.setsockopt(zmq.LINGER, 0)
+        cmdsock.connect("tcp://"+self.addr+":5561")
+        cmdsock.SNDTIMEO = 2000
+        cmdsock.RCVTIMEO = 2000
+        self.cmdsock = cmdsock
+
+    def reset(self):
+        try:
+            self.send("DIE")
+        except zmq.ZMQError:
+            pass
+
+        self.cmdsock.disconnect("tcp://"+self.addr+":5561")
+        self.cmdsock.close()
+        self.statesock.disconnect("tcp://"+self.addr+":5560")
+        self.statesock.close()
+        self.connect()
+
+    def send(self, cmd, msg=""):
+        print self.addr, " > ", cmd, msg
+        self.cmdsock.send_string(cmd + ":" + msg)
+        response = self.cmdsock.recv()
+        #print self.addr, "<-", response
+        if response == "ERROR":
+            raise FailedRequestError("client returned ERROR")
+
+        return response
+
+    def expect(self, expectedstate, timeout=2000):
+        print self.addr, "[" + expectedstate + "]"
+        self.statesock.RCVTIMEO = timeout
+        [state, data] = self.statesock.recv().split(':')
+        if state != expectedstate:
+            raise UnexpectedStateError("unexpected state " + state)
+
+        return data
 
 def audio_int(num_samples=50):
 
-    print "Getting intensity values from mic."
+    print "_ calculating mic noise floor ..."
     p = pyaudio.PyAudio()
+    stream = p.open(
 
-    stream = p.open(format=FORMAT,
-                    channels=CHANNELS,
-                    rate=RATE,
-                    input=True,
-                    frames_per_buffer=CHUNK)
+        format=FORMAT,
+        channels=CHANNELS,
+        rate=RATE,
+        input=True,
+        frames_per_buffer=CHUNK)
 
     values = [math.sqrt(abs(audioop.avg(stream.read(CHUNK), 4))) 
-              for x in range(num_samples)] 
-    values = sorted(values, reverse=True)
-    r = sum(values[:int(num_samples * 0.2)]) / int(num_samples * 0.2)
-    print " Finished "
-    print " Average audio intensity is ", r
+    for x in range(num_samples)] 
+        values = sorted(values, reverse=True)
+        r = sum(values[:int(num_samples * 0.2)]) / int(num_samples * 0.2)
+    print "Average audio noise is : ","%.2f" % r
     stream.close()
     p.terminate()
     return r
 
-
-def listen_for_speech(threshold=THRESHOLD, num_phrases=1):
+def listen_for_speech(threshold, num_phrases=1):
 
     p = pyaudio.PyAudio()
 
@@ -43,12 +92,11 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=1):
                     input=True,
                     frames_per_buffer=CHUNK)
 
-    print "* Listening mic. "
+    print "_listening..."
     audio2send = []
-    cur_data = ''  # current chunk  of audio data
+    cur_data = ''
     rel = RATE/CHUNK
     slid_win = deque(maxlen=SILENCE_LIMIT * rel)
-    #Prepend audio from 0.5 seconds before noise was detected
     prev_audio = deque(maxlen=PREV_AUDIO * rel) 
     started = False
     n = num_phrases
@@ -57,23 +105,20 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=1):
     while (num_phrases == -1 or n > 0):
         cur_data = stream.read(CHUNK)
         slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4))))
-        #print slid_win[-1]
         if(sum([x > THRESHOLD for x in slid_win]) > 0):
             if(not started):
-                print "Starting record of phrase"
+                print "_ starting record of phrase"
                 started = True
             audio2send.append(cur_data)
         elif (started is True):
             print "Finished"
-            # The limit was reached, finish capture and deliver.
             filename = save_speech(list(prev_audio) + audio2send, p)
-            # Reset all
             started = False
             slid_win = deque(maxlen=SILENCE_LIMIT * rel)
             prev_audio = deque(maxlen=0.5 * rel) 
             audio2send = []
             n -= 1
-            print "Listening ..."
+            print "_ listening..."
         else:
             prev_audio.append(cur_data)
 
