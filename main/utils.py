@@ -13,6 +13,12 @@ PREV_AUDIO = 1
 
 context = zmq.Context()
 
+class UnexpectedStateError(Exception):
+    pass
+
+class FailedRequestError(Exception):
+    pass
+
 class Client:
     def __init__(self, addr):
 
