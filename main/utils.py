@@ -53,7 +53,7 @@ class Client:
         self.connect()
 
     def send(self, cmd, msg=""):
-        print "# ",self.addr, " > ", cmd, msg
+        print "#",self.addr, " > ", cmd, ":", msg
         self.cmdsock.send_string(cmd + ":" + msg)
         response = self.cmdsock.recv()
         #print self.addr, "<-", response
