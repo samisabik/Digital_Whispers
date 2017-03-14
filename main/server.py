@@ -58,7 +58,6 @@ while True:
 		print "\n\t", client.addr, "\n"
 		try:
 			if nextclient:
-				print "Listen:"
 				nextclient.send("LISTEN")
 				nextclient.expect("listening")
 		except (zmq.ZMQError, UnexpectedStateError, FailedRequestError) as e:
@@ -68,7 +67,6 @@ while True:
 		GPIO.output(i+2, 1)
 		time.sleep(1)
 		try:
-			print "Talk:"
 			client.send("TALK", text)
 			client.expect("talking")
 			client.expect("waiting", 20*1000)
