@@ -20,9 +20,7 @@ voice = TTSvoices[random.randrange(0, 4)]
 context = zmq.Context()
 statesock = context.socket(zmq.PUB)
 statesock.setsockopt(zmq.LINGER, 0)
-# statesock.setsockopt(zmq.CONFLATE, 1)
 statesock.bind("tcp://*:5560")
-
 
 cmdsock = context.socket(zmq.REP)
 cmdsock.setsockopt(zmq.LINGER, 0)
@@ -46,7 +44,7 @@ def error():
 def expect(expectedstate):
 	if (state == expectedstate):
 		ok()
-		sleep(0.1) # State messages seem to go missing sometimes without the delay
+		sleep(0.1)
 	else:
 		print("Expected state", expectedstate, "not", state)
 		error()

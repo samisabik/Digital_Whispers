@@ -59,7 +59,6 @@ class Client:
         #print self.addr, "<-", response
         if response == "ERROR":
             raise FailedRequestError("client returned ERROR")
-
         return response
 
     def expect(self, expectedstate, timeout=2000):
@@ -68,7 +67,6 @@ class Client:
         [state, data] = self.statesock.recv().split(':')
         if state != expectedstate:
             raise UnexpectedStateError("unexpected state " + state)
-
         return data
 
 def audio_int(num_samples=50):
@@ -100,7 +98,7 @@ def listen_for_speech(threshold, num_phrases=1):
                     input=True,
                     frames_per_buffer=CHUNK)
 
-    print "# listening..."
+    print "# whisper_master listening..."
     audio2send = []
     cur_data = ''
     rel = RATE/CHUNK

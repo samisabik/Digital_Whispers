@@ -45,13 +45,14 @@ while True:
 		parsed_json = json.loads(result)
 	try:
 		text = parsed_json['results'][0]['alternatives'][0]['transcript']
-		print "# seed : " + text
+		print "# starting with phrase : " + text = "\n"
 	except:
 		print "# STT failed!"
 		continue
 	with open('output/'+filename+'.txt', 'a') as text_file:
 		text_file.write(text + '\n')
 	for i, client in enumerate(clients):
+		print "\n"
 		if i+1 < len(clients):
 			nextclient = clients[i+1]
 		else:
