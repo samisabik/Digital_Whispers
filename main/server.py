@@ -11,7 +11,7 @@ ts = time.time()
 filename = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d_%H%M')
 
 ## Setup GPIOs
-GPIO.setmode(GPIO.BOARD) 
+GPIO.setmode(GPIO.BCM) 
 GPIO.setup(2, GPIO.OUT)
 GPIO.setup(3, GPIO.OUT)
 GPIO.setup(4, GPIO.OUT)
@@ -19,12 +19,6 @@ GPIO.setup(5, GPIO.OUT)
 GPIO.setup(6, GPIO.OUT)
 GPIO.setup(7, GPIO.OUT)
 GPIO.setup(8, GPIO.OUT)
-
-for x in range(2, 8):
-    print "GPIO " + x 
-    GPIO.output(x, 1)
-    time.sleep(1)
-    GPIO.output(x, 0)
 
 ## IBM Watson API Call
 text_to_speech = TextToSpeechV1(
@@ -72,8 +66,8 @@ while True:
 			print nextclient.addr, "failed:", e
 			nextclient.reset()
 			nextclient = None
-		# activate relay on client 
-		# time.sleep(1) # delay for bootup of CRT
+		GPIO.output(client+2, 1)
+		time.sleep(1)
 		try:
 			print "Talk:"
 			client.send("TALK", text)
@@ -82,9 +76,9 @@ while True:
 		except (zmq.ZMQError, UnexpectedStateError, FailedRequestError) as e:
 			print client.addr, "failed:", e
 			client.reset()
-			# stop relay on client
+			GPIO.output(client+2, 0)
 		time.sleep(1) ## addin extra time to add some fucking up
-		# stop relay on client
+	    GPIO.output(client+2, 0)
 		try:
 			if nextclient:
 				print "TTS:"
