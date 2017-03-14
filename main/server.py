@@ -11,6 +11,8 @@ filename = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d_%H%M')
 
 ## Setup GPIOs
 GPIO.setmode(GPIO.BCM) 
+GPIO.setwarnings(False)
+
 GPIO.setup(2, GPIO.OUT)
 GPIO.setup(3, GPIO.OUT)
 GPIO.setup(4, GPIO.OUT)
@@ -37,7 +39,6 @@ print "# starting whisper_master"
 THRESHOLD = audio_int(50) + LEVEL
 
 while True:
-	print "\n\twhisper_master\n"
 	listen_for_speech(THRESHOLD,1)
 	with open('output/record.wav', 'rb') as audio_file:
 		result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
