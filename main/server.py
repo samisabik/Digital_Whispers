@@ -77,7 +77,7 @@ while True:
 			client.reset()
 			GPIO.output(client+2, 0)
 		time.sleep(1) ## addin extra time to add some fucking up
-	    GPIO.output(client+2, 0)
+		GPIO.output(client+2, 0)
 		try:
 			if nextclient:
 				print "TTS:"
