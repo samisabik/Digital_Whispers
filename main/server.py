@@ -16,7 +16,6 @@ class UnexpectedStateError(Exception):
 class FailedRequestError(Exception):
 	pass
 
-## IBM Watson API
 text_to_speech = TextToSpeechV1(
 	username='96db6c7a-2595-491a-9a62-740dc31e0482',
 	password='azDpe42DlQ5C')
@@ -26,58 +25,6 @@ speech_to_text = SpeechToTextV1(
 	password='pU5vkvlPIpmZ')
 
 NUM_CLIENTS = 7
-
-class Client:
-	def __init__(self, addr):
-
-		self.addr = addr
-		self.connect()
-
-	def connect(self):
-		statesock = context.socket(zmq.SUB)
-		statesock.setsockopt(zmq.LINGER, 0)
-		statesock.connect("tcp://"+self.addr+":5560")
-		statesock.setsockopt(zmq.SUBSCRIBE,'')
-		statesock.SNDTIMEO = 2000
-		self.statesock = statesock
-
-		cmdsock = context.socket(zmq.REQ)
-		cmdsock.setsockopt(zmq.LINGER, 0)
-		cmdsock.connect("tcp://"+self.addr+":5561")
-		cmdsock.SNDTIMEO = 2000
-		cmdsock.RCVTIMEO = 2000
-		self.cmdsock = cmdsock
-
-	def reset(self):
-		try:
-			self.send("DIE")
-		except zmq.ZMQError:
-			pass
-
-		self.cmdsock.disconnect("tcp://"+self.addr+":5561")
-		self.cmdsock.close()
-		self.statesock.disconnect("tcp://"+self.addr+":5560")
-		self.statesock.close()
-		self.connect()
-
-	def send(self, cmd, msg=""):
-		print self.addr, " > ", cmd, msg
-		self.cmdsock.send_string(cmd + ":" + msg)
-		response = self.cmdsock.recv()
-		#print self.addr, "<-", response
-		if response == "ERROR":
-			raise FailedRequestError("client returned ERROR")
-
-		return response
-
-	def expect(self, expectedstate, timeout=2000):
-		print self.addr, "[" + expectedstate + "]"
-		self.statesock.RCVTIMEO = timeout
-		[state, data] = self.statesock.recv().split(':')
-		if state != expectedstate:
-			raise UnexpectedStateError("unexpected state " + state)
-
-		return data
 
 clients = [Client('whisper_'+str(x)) for x in range(0,NUM_CLIENTS)]
 
@@ -105,10 +52,7 @@ while True:
 			nextclient = clients[i+1]
 		else:
 			nextclient = None
-	    
-	    #cprint('_ whisper_', 'green')
 		print "===", client.addr, "==="
-
 		try:
 			if nextclient:
 				print "Listen:"
@@ -119,8 +63,10 @@ while True:
 			nextclient.reset()
 			nextclient = None
 
+		# activate relay on client 
+		# sleep(1)
+		
 		try:
-			# print "sending", text
 			print "Talk:"
 			client.send("TALK", text)
 			client.expect("talking")
@@ -128,8 +74,12 @@ while True:
 		except (zmq.ZMQError, UnexpectedStateError, FailedRequestError) as e:
 			print client.addr, "failed:", e
 			client.reset()
+			# stop relay on client
 
-		sleep(1)
+		sleep(1) ## addin extra time to add some fucking up
+
+		# stop relay on client
+		
 		try:
 			if nextclient:
 				print "TTS:"
@@ -150,5 +100,3 @@ while True:
 	with open('output/text.txt', 'a') as text_file:
 		text_file.write(text + '\n\n')
 	print "-"
-# sleep(10)
-
