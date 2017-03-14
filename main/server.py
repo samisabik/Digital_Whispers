@@ -32,7 +32,7 @@ clients = [Client('whisper_'+str(x)) for x in range(0,NUM_CLIENTS)]
 threshold = audio_int(50) + LEVEL
 
 while True:
-	print "# whisper_master"
+	print "\n\t\t# whisper_master"
 	listen_for_speech(threshold,1)
 	with open('output/record.wav', 'rb') as audio_file:
 		result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
