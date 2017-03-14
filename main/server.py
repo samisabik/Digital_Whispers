@@ -65,10 +65,8 @@ while True:
 			print nextclient.addr, "failed:", e
 			nextclient.reset()
 			nextclient = None
-
 		GPIO.output(client+2, 1)
 		time.sleep(1)
-		
 		try:
 			print "Talk:"
 			client.send("TALK", text)
