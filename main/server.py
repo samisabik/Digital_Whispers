@@ -45,7 +45,7 @@ while True:
 		parsed_json = json.loads(result)
 	try:
 		text = parsed_json['results'][0]['alternatives'][0]['transcript']
-		print "# starting with phrase : " + text + "\n"
+		print "# starting with phrase : " + text
 	except:
 		print "# STT failed!"
 		continue
