@@ -94,7 +94,7 @@ def listen_for_speech(threshold, num_phrases=1):
                     input=True,
                     frames_per_buffer=CHUNK)
 
-    print "\t- listening..."
+    print "# listening..."
     audio2send = []
     cur_data = ''
     rel = RATE/CHUNK
@@ -109,7 +109,7 @@ def listen_for_speech(threshold, num_phrases=1):
         slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4))))
         if(sum([x > threshold for x in slid_win]) > 0):
             if(not started):
-                print "\t- voice detected, starting record..."
+                print "# voice detected, starting record..."
                 started = True
             audio2send.append(cur_data)
         elif (started is True):
@@ -122,7 +122,7 @@ def listen_for_speech(threshold, num_phrases=1):
         else:
             prev_audio.append(cur_data)
 
-    print "\t- done recording!"
+    print "# done recording!"
     stream.close()
     p.terminate()
 
