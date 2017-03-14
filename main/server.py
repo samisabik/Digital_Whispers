@@ -3,9 +3,28 @@ import datetime, time, os, json, zmq
 from utils import *
 from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
+import RPi.GPIO as GPIO
 
+
+## Input / Output log file
 ts = time.time()
 filename = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d_%H%M')
+
+## Setup GPIOs
+GPIO.setmode(GPIO.BOARD) 
+GPIO.setup(2, GPIO.OUT)
+GPIO.setup(3, GPIO.OUT)
+GPIO.setup(4, GPIO.OUT)
+GPIO.setup(5, GPIO.OUT)
+GPIO.setup(6, GPIO.OUT)
+GPIO.setup(7, GPIO.OUT)
+GPIO.setup(8, GPIO.OUT)
+
+for x in range(2, 8):
+    print "GPIO " + x 
+    GPIO.output(x, 1)
+    time.sleep(1)
+    GPIO.output(x, 0)
 
 ## IBM Watson API Call
 text_to_speech = TextToSpeechV1(
@@ -36,7 +55,7 @@ while True:
 	except:
 		print "# STT failed!"
 		continue
-	with open('output/'+filename'+.txt', 'a') as text_file:
+	with open('output/'+filename+'.txt', 'a') as text_file:
 		text_file.write(text + '\n')
 	for i, client in enumerate(clients):
 		if i+1 < len(clients):
@@ -80,6 +99,6 @@ while True:
 		except (zmq.ZMQError, UnexpectedStateError, FailedRequestError) as e:
 			print nextclient.addr, "failed:", e
 			nextclient.reset()
-	with open('output/'+filename'+.txt', 'a') as text_file:
+	with open('output/'+filename+'.txt', 'a') as text_file:
 		text_file.write(text + '\n\n')
 	print "-"

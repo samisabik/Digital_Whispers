@@ -36,10 +36,6 @@ echo "Installing ZeroMQ"
 echo "========================="
 pip install pyzmq
 
-echo "Installing termcolor"
-echo "========================="
-pip install termcolor
-
 echo "Setting up WIFI"
 echo "========================="
 cp wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
