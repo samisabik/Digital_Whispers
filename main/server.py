@@ -1,31 +1,20 @@
 #!/usr/bin/env python
-import sys, datetime, os, json, zmq
+import datetime, time, os, json, zmq
 from utils import *
 from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
-from time import sleep
 
+ts = time.time()
+filename = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d_%H%M')
+
+## IBM Watson API Call
 text_to_speech = TextToSpeechV1(
 	username='96db6c7a-2595-491a-9a62-740dc31e0482',
 	password='azDpe42DlQ5C')
-
 speech_to_text = SpeechToTextV1(
 	username='a1c7a39e-6618-4274-98f1-6ec5ef7237b8',
 	password='pU5vkvlPIpmZ')
 
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-print bcolors.WARNING + "Warning: No active frommets remain. Continue?" + bcolors.ENDC
-
-# threshold from noise floor
 LEVEL = 200
 NUM_CLIENTS = 7
 clients = [Client('whisper_'+str(x)) for x in range(0,NUM_CLIENTS)]
@@ -47,7 +36,7 @@ while True:
 	except:
 		print "# STT failed!"
 		continue
-	with open('output/text.txt', 'a') as text_file:
+	with open('output/'+filename'+.txt', 'a') as text_file:
 		text_file.write(text + '\n')
 	for i, client in enumerate(clients):
 		if i+1 < len(clients):
@@ -65,7 +54,7 @@ while True:
 			nextclient.reset()
 			nextclient = None
 		# activate relay on client 
-		# sleep(1)
+		# time.sleep(1) # delay for bootup of CRT
 		try:
 			print "Talk:"
 			client.send("TALK", text)
@@ -75,7 +64,7 @@ while True:
 			print client.addr, "failed:", e
 			client.reset()
 			# stop relay on client
-		sleep(1) ## addin extra time to add some fucking up
+		time.sleep(1) ## addin extra time to add some fucking up
 		# stop relay on client
 		try:
 			if nextclient:
@@ -91,6 +80,6 @@ while True:
 		except (zmq.ZMQError, UnexpectedStateError, FailedRequestError) as e:
 			print nextclient.addr, "failed:", e
 			nextclient.reset()
-	with open('output/text.txt', 'a') as text_file:
+	with open('output/'+filename'+.txt', 'a') as text_file:
 		text_file.write(text + '\n\n')
 	print "-"
