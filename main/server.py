@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import socket, sys, time, datetime, os, json, utils
 from utils import *
+from termcolor import colored, cprint
 from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
 import zmq
@@ -60,10 +61,10 @@ class Client:
 		self.connect()
 
 	def send(self, cmd, msg=""):
-		print self.addr, "->", cmd, msg
+		print self.addr, " > ", cmd, msg
 		self.cmdsock.send_string(cmd + ":" + msg)
 		response = self.cmdsock.recv()
-		print self.addr, "<-", response
+		#print self.addr, "<-", response
 		if response == "ERROR":
 			raise FailedRequestError("client returned ERROR")
 
@@ -83,7 +84,7 @@ clients = [Client('whisper_'+str(x)) for x in range(0,NUM_CLIENTS)]
 threshold = audio_int(50) + level
 
 while True:
-	print "=== whisper_master ==="
+	print(colored('_ whisper_master', 'green'))
 	listen_for_speech(threshold,1)
 	with open('output/record.wav', 'rb') as audio_file:
 		result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))
@@ -104,7 +105,8 @@ while True:
 			nextclient = clients[i+1]
 		else:
 			nextclient = None
-
+	    
+	    #cprint('_ whisper_', 'green')
 		print "===", client.addr, "==="
 
 		try:
