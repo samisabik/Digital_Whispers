@@ -8,6 +8,9 @@ from time import sleep
 context = zmq.Context()
 level = 200
 
+os.system('clear')
+print "- starting whisper_master"
+
 class UnexpectedStateError(Exception):
 	pass
 
