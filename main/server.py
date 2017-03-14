@@ -55,7 +55,6 @@ while True:
 			nextclient = clients[i+1]
 		else:
 			nextclient = None
-		print "\n\t", client.addr, "\n"
 		try:
 			if nextclient:
 				nextclient.send("LISTEN")
