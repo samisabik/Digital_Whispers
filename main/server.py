@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-import socket, sys, time, datetime, os, json, utils
+import sys, datetime, os, json, zmq
 from utils import *
-from termcolor import colored, cprint
 from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
-import zmq
 from time import sleep
 
 context = zmq.Context()
@@ -31,7 +29,7 @@ clients = [Client('whisper_'+str(x)) for x in range(0,NUM_CLIENTS)]
 threshold = audio_int(50) + level
 
 while True:
-	print(colored('_ whisper_master', 'green'))
+	print "_ whisper_master"
 	listen_for_speech(threshold,1)
 	with open('output/record.wav', 'rb') as audio_file:
 		result = json.dumps(speech_to_text.recognize(audio_file, content_type='audio/wav'))

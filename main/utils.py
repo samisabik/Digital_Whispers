@@ -1,6 +1,8 @@
 import pyaudio, wave, math
+import socket, sys, time, datetime, os
 from collections import deque
 import audioop
+import zmq
 
 CHUNK = 4096 
 FORMAT = pyaudio.paInt16
@@ -8,6 +10,8 @@ CHANNELS = 1
 RATE = 44100
 SILENCE_LIMIT = 3 
 PREV_AUDIO = 1  
+
+context = zmq.Context()
 
 class Client:
     def __init__(self, addr):
@@ -63,21 +67,19 @@ class Client:
 
 def audio_int(num_samples=50):
 
-    print "_ calculating mic noise floor ..."
+    print "_ measuring noise floor: ",
     p = pyaudio.PyAudio()
     stream = p.open(
-
         format=FORMAT,
         channels=CHANNELS,
         rate=RATE,
         input=True,
         frames_per_buffer=CHUNK)
-
     values = [math.sqrt(abs(audioop.avg(stream.read(CHUNK), 4))) 
     for x in range(num_samples)] 
-        values = sorted(values, reverse=True)
-        r = sum(values[:int(num_samples * 0.2)]) / int(num_samples * 0.2)
-    print "Average audio noise is : ","%.2f" % r
+    values = sorted(values, reverse=True)
+    r = sum(values[:int(num_samples * 0.2)]) / int(num_samples * 0.2)
+    print "%.2f" % r
     stream.close()
     p.terminate()
     return r
@@ -105,7 +107,7 @@ def listen_for_speech(threshold, num_phrases=1):
     while (num_phrases == -1 or n > 0):
         cur_data = stream.read(CHUNK)
         slid_win.append(math.sqrt(abs(audioop.avg(cur_data, 4))))
-        if(sum([x > THRESHOLD for x in slid_win]) > 0):
+        if(sum([x > threshold for x in slid_win]) > 0):
             if(not started):
                 print "_ starting record of phrase"
                 started = True
