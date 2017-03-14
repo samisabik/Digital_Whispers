@@ -79,7 +79,7 @@ def audio_int(num_samples=50):
     for x in range(num_samples)] 
     values = sorted(values, reverse=True)
     r = sum(values[:int(num_samples * 0.2)]) / int(num_samples * 0.2)
-    print "- average noise floor ="%.2f" % r
+    print "- average noise floor = " + "%.2f" % r
     stream.close()
     p.terminate()
     return r
