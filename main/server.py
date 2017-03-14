@@ -5,7 +5,6 @@ from os.path import join, dirname
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
 import RPi.GPIO as GPIO
 
-
 ## Input / Output log file
 ts = time.time()
 filename = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d_%H%M')
@@ -66,8 +65,10 @@ while True:
 			print nextclient.addr, "failed:", e
 			nextclient.reset()
 			nextclient = None
+
 		GPIO.output(client+2, 1)
 		time.sleep(1)
+		
 		try:
 			print "Talk:"
 			client.send("TALK", text)
@@ -95,4 +96,3 @@ while True:
 			nextclient.reset()
 	with open('output/'+filename+'.txt', 'a') as text_file:
 		text_file.write(text + '\n\n')
-	print "-"
