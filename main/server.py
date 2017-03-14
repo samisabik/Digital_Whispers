@@ -31,9 +31,9 @@ while True:
 		parsed_json = json.loads(result)
 	try:
 		text = parsed_json['results'][0]['alternatives'][0]['transcript']
-		print "# STT : " + text
+		print "# seed : " + text
 	except:
-		print "# STT Failed!"
+		print "# STT failed!"
 		continue
 	with open('output/text.txt', 'a') as text_file:
 		text_file.write(text + '\n')
@@ -42,7 +42,7 @@ while True:
 			nextclient = clients[i+1]
 		else:
 			nextclient = None
-		print "===", client.addr, "==="
+		print "\n\t", client.addr, "\n"
 		try:
 			if nextclient:
 				print "Listen:"
