@@ -21,6 +21,8 @@ GPIO.setup(6, GPIO.OUT)
 GPIO.setup(7, GPIO.OUT)
 GPIO.setup(8, GPIO.OUT)
 
+## MAKE A FOR LOOP !
+
 ## IBM Watson API Call
 text_to_speech = TextToSpeechV1(
 	username='YOUR_WATSON_USERNAME',
