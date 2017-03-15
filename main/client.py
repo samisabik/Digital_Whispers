@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os,sys,random,json,zmq
 from utils import *
 from os.path import join, dirname
