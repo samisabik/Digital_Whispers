@@ -12,9 +12,6 @@ RATE = 44100
 SILENCE_LIMIT = 3 
 PREV_AUDIO = 1  
 
-syms = ['\\', '|', '/', '-']
-bs = '\b'
-
 context = zmq.Context()
 
 class UnexpectedStateError(Exception):
@@ -86,9 +83,6 @@ def audio_int(num_samples=50):
     values = [math.sqrt(abs(audioop.avg(stream.read(CHUNK), 4))) 
     for x in range(num_samples)] 
     values = sorted(values, reverse=True)
-    for sym in syms:
-        sys.stdout.write("\b%s" % sym)
-        sys.stdout.flush()
     r = sum(values[:int(num_samples * 0.2)]) / int(num_samples * 0.2)
     print "# average noise floor: " + "%.2f" % r
     stream.close()
