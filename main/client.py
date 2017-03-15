@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os,sys,random,json,zmq
+import os,sys,random,json,zmq,utils
 from utils import *
 from os.path import join, dirname
 from sys import exit
