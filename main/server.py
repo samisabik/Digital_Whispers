@@ -81,7 +81,6 @@ while True:
 		GPIO.output(i+2, 0)
 		try:
 			if nextclient:
-				print "TTS:"
 				nextclient.send("STOP_LISTEN")
 
 				clienttext = nextclient.expect("waiting", 20*1000)
