@@ -10,7 +10,6 @@ from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
 text_to_speech = TextToSpeechV1(
 	username='YOUR_WATSON_USERNAME',
 	password='YOUR_WATSON_PASSWORD')
-
 speech_to_text = SpeechToTextV1(
 	username='YOUR_WATSON_USERNAME',
 	password='YOUR_WATSON_PASSWORD')

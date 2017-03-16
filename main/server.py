@@ -12,14 +12,8 @@ filename = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d_%H%M')
 ## Setup GPIOs
 GPIO.setmode(GPIO.BCM) 
 GPIO.setwarnings(False)
-
-GPIO.setup(2, GPIO.OUT)
-GPIO.setup(3, GPIO.OUT)
-GPIO.setup(4, GPIO.OUT)
-GPIO.setup(5, GPIO.OUT)
-GPIO.setup(6, GPIO.OUT)
-GPIO.setup(7, GPIO.OUT)
-GPIO.setup(8, GPIO.OUT)
+for x in range(2, 9):
+	GPIO.setup(x, GPIO.OUT)
 
 ## MAKE A FOR LOOP !
 
