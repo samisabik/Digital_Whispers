@@ -8,12 +8,11 @@ from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
 
 ## IBM Watson API
 text_to_speech = TextToSpeechV1(
-	username='96db6c7a-2595-491a-9a62-740dc31e0482',
-	password='azDpe42DlQ5C')
-
+	username='c62c972e-727b-4ee3-9436-b808cbbca69a',
+	password='BkSjWMgbDopX')
 speech_to_text = SpeechToTextV1(
-	username='a1c7a39e-6618-4274-98f1-6ec5ef7237b8',
-	password='pU5vkvlPIpmZ')
+	username='22d00128-ea8c-4d10-a0e8-7059450c7de7',
+	password='x8OOTkHv0vXz')
 
 TTSvoices = ["en-US_AllisonVoice","en-US_LisaVoice","en-GB_KateVoice","en-US_MichaelVoice"]
 voice = TTSvoices[random.randrange(0, 4)]

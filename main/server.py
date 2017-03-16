@@ -12,24 +12,18 @@ filename = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d_%H%M')
 ## Setup GPIOs
 GPIO.setmode(GPIO.BCM) 
 GPIO.setwarnings(False)
-
-GPIO.setup(2, GPIO.OUT)
-GPIO.setup(3, GPIO.OUT)
-GPIO.setup(4, GPIO.OUT)
-GPIO.setup(5, GPIO.OUT)
-GPIO.setup(6, GPIO.OUT)
-GPIO.setup(7, GPIO.OUT)
-GPIO.setup(8, GPIO.OUT)
+for x in range(2, 9):
+	GPIO.setup(x, GPIO.OUT)
 
 ## MAKE A FOR LOOP !
 
 ## IBM Watson API Call
 text_to_speech = TextToSpeechV1(
-	username='96db6c7a-2595-491a-9a62-740dc31e0482',
-	password='azDpe42DlQ5C')
+	username='c62c972e-727b-4ee3-9436-b808cbbca69a',
+	password='BkSjWMgbDopX')
 speech_to_text = SpeechToTextV1(
-	username='a1c7a39e-6618-4274-98f1-6ec5ef7237b8',
-	password='pU5vkvlPIpmZ')
+	username='22d00128-ea8c-4d10-a0e8-7059450c7de7',
+	password='x8OOTkHv0vXz')
 
 LEVEL = 200
 NUM_CLIENTS = 7
