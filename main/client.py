@@ -6,13 +6,13 @@ from sys import exit
 from time import sleep
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
 
-## IBM Watson API
+## IBM Watson API (Germany LOC)
 text_to_speech = TextToSpeechV1(
-	username='c62c972e-727b-4ee3-9436-b808cbbca69a',
-	password='BkSjWMgbDopX')
+	username='b2cb07cb-14f8-4262-9a57-331747a50639',
+	password='xKy1K6fSOvU0')
 speech_to_text = SpeechToTextV1(
-	username='22d00128-ea8c-4d10-a0e8-7059450c7de7',
-	password='x8OOTkHv0vXz')
+	username='4ad77d91-b0ab-4a70-bf37-6af867f83599',
+	password='s32ny3e1eOTW')
 
 TTSvoices = ["en-US_AllisonVoice","en-US_LisaVoice","en-GB_KateVoice","en-US_MichaelVoice"]
 voice = TTSvoices[random.randrange(0, 4)]
