@@ -6,7 +6,7 @@ from sys import exit
 from time import sleep
 from watson_developer_cloud import TextToSpeechV1,SpeechToTextV1
 
-## IBM Watson API
+## IBM Watson API (Germany LOC)
 text_to_speech = TextToSpeechV1(
 	username='YOUR_WATSON_USERNAME',
 	password='YOUR_WATSON_PASSWORD')
