@@ -1,4 +1,4 @@
-#Digital Whispers
+## Digital Whispers
 
 In a world populated by an increasing abundance of Artificial Intelligences (AI), it has become more and more important for us to understand the behaviours of our smarter machines. AI promises perfect systems designed to master their functions. As humans, we have imbued these artificial creatures with senses. We have given them the ability to communicate to an ever nearer degree of naturalness; speech and hearing being the most developed. With these efforts, we expect these systems to be as perfect as we have designed them; but what about errors? Beautiful mispronunciation? Hearing loss? Faded meaning? What about the little misunderstandings that makes us human? Can a machine suffer from them and experience them also?
 
